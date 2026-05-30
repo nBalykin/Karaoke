@@ -6,38 +6,184 @@
 <title>Karaoke</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300&display=swap');
-  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-  :root{--bg:#0f0e0c;--surface:#1a1814;--border:#2e2b26;--gold:#c9a84c;--gold2:#e8c96b;--text:#e8e0d0;--muted:#8a8070}
-  body{background:var(--bg);color:var(--text);font-family:'Source Serif 4',Georgia,serif;min-height:100vh}
-  body::before{content:'';position:fixed;inset:0;z-index:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none}
-  header{position:relative;z-index:1;text-align:center;padding:clamp(48px,8vw,100px) 24px clamp(32px,5vw,60px);border-bottom:1px solid var(--border)}
-  .logo{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,7vw,4.5rem);font-weight:700;letter-spacing:-.02em;background:linear-gradient(135deg,var(--gold) 0%,var(--gold2) 50%,var(--gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1}
-  .subtitle{margin-top:10px;color:var(--muted);font-size:.85rem;letter-spacing:.2em;text-transform:uppercase}
-  .search-wrap{position:relative;z-index:1;max-width:580px;margin:32px auto 0;padding:0 20px}
-  #search{width:100%;padding:14px 20px 14px 48px;background:var(--surface);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Source Serif 4',serif;font-size:1rem;outline:none;transition:border-color .2s}
-  #search:focus{border-color:var(--gold)}
-  #search::placeholder{color:var(--muted)}
-  .search-icon{position:absolute;left:36px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;font-size:1rem}
-  #count{position:absolute;right:36px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.78rem;letter-spacing:.05em}
-  main{position:relative;z-index:1;max-width:780px;margin:0 auto;padding:40px 20px 80px}
-  #song-list{list-style:none}
-  #song-list li{border-bottom:1px solid var(--border);transition:background .15s}
-  #song-list li:first-child{border-top:1px solid var(--border)}
-  #song-list a{display:flex;align-items:baseline;gap:12px;padding:16px 8px;text-decoration:none;color:var(--text);transition:color .15s,padding-left .2s}
-  #song-list a:hover{color:var(--gold2);padding-left:14px}
-  .song-artist{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);white-space:nowrap;min-width:100px;flex-shrink:0}
-  .song-title{font-size:1rem;font-family:'Source Serif 4',serif;flex:1}
-  .song-arrow{color:var(--border);font-size:.8rem;transition:color .15s,transform .2s}
-  #song-list a:hover .song-arrow{color:var(--gold);transform:translateX(4px)}
-  .hidden{display:none!important}
-  #empty{text-align:center;color:var(--muted);padding:64px 0;font-style:italic;display:none}
-  footer{position:relative;z-index:1;text-align:center;padding:24px;color:var(--muted);font-size:.75rem;letter-spacing:.1em;border-top:1px solid var(--border)}
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:      #0f0e0c;
+    --surface: #1a1814;
+    --border:  #2e2b26;
+    --gold:    #c9a84c;
+    --gold2:   #e8c96b;
+    --text:    #e8e0d0;
+    --muted:   #8a8070;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Source Serif 4', Georgia, serif;
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  header {
+    position: relative; z-index: 1;
+    text-align: center;
+    padding: clamp(48px, 8vw, 100px) 24px clamp(32px, 5vw, 60px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 7vw, 4.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 50%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+  }
+
+  .subtitle {
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .search-wrap {
+    position: relative; z-index: 1;
+    max-width: 580px;
+    margin: 32px auto 0;
+    padding: 0 20px;
+  }
+
+  #search {
+    width: 100%;
+    padding: 14px 20px 14px 48px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'Source Serif 4', serif;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  #search:focus { border-color: var(--gold); }
+  #search::placeholder { color: var(--muted); }
+
+  .search-icon {
+    position: absolute;
+    left: 36px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    pointer-events: none;
+    font-size: 1rem;
+  }
+
+  #count {
+    position: absolute;
+    right: 36px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+  }
+
+  main {
+    position: relative; z-index: 1;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  #song-list {
+    list-style: none;
+  }
+
+  #song-list li {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+
+  #song-list li:first-child { border-top: 1px solid var(--border); }
+
+  #song-list a {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 16px 8px;
+    text-decoration: none;
+    color: var(--text);
+    transition: color 0.15s, padding-left 0.2s;
+  }
+
+  #song-list a:hover {
+    color: var(--gold2);
+    padding-left: 14px;
+  }
+
+  .song-artist {
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    white-space: nowrap;
+    min-width: 100px;
+    flex-shrink: 0;
+  }
+
+  .song-title {
+    font-size: 1rem;
+    font-family: 'Source Serif 4', serif;
+    flex: 1;
+  }
+
+  .song-arrow {
+    color: var(--border);
+    font-size: 0.8rem;
+    transition: color 0.15s, transform 0.2s;
+  }
+  #song-list a:hover .song-arrow {
+    color: var(--gold);
+    transform: translateX(4px);
+  }
+
+  .hidden { display: none !important; }
+
+  #empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 64px 0;
+    font-style: italic;
+    display: none;
+  }
+
+  footer {
+    position: relative; z-index: 1;
+    text-align: center;
+    padding: 24px;
+    color: var(--muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    border-top: 1px solid var(--border);
+  }
 </style>
 </head>
 <body>
 <header>
   <div class="logo">Karaoke</div>
-  <p class="subtitle">207 songs</p>
+  <p class="subtitle">211 songs</p>
   <div class="search-wrap">
     <span class="search-icon">♪</span>
     <input id="search" type="search" placeholder="Artist or song title..." autocomplete="off" autocorrect="off" spellcheck="false">
@@ -46,230 +192,242 @@
 </header>
 <main>
   <ul id="song-list">
-    <li data-q="шуфутинский 3 сентября"><a href="songs/3.html"><span class="song-artist">Шуфутинский</span><span class="song-title">3 сентября</span><span class="song-arrow">→</span></a></li>
-    <li data-q="город 312 213 дорог"><a href="songs/312-213.html"><span class="song-artist">Город 312</span><span class="song-title">213 дорог</span><span class="song-arrow">→</span></a></li>
-    <li data-q="город 312 фонари"><a href="songs/312.html"><span class="song-artist">Город 312</span><span class="song-title">Фонари</span><span class="song-arrow">→</span></a></li>
-    <li data-q="секрет моя любовь на 5 этаже"><a href="songs/5.html"><span class="song-artist">Секрет</span><span class="song-title">Моя любовь на 5 этаже</span><span class="song-arrow">→</span></a></li>
-    <li data-q="браво 7 тысяч над землей"><a href="songs/7.html"><span class="song-artist">Браво</span><span class="song-title">7 тысяч над землей</span><span class="song-arrow">→</span></a></li>
     <li data-q="abba money"><a href="songs/abba-money.html"><span class="song-artist">Abba</span><span class="song-title">Money</span><span class="song-arrow">→</span></a></li>
     <li data-q="abba the winner takes it all"><a href="songs/abba-the-winner-takes-it-all.html"><span class="song-artist">Abba</span><span class="song-title">The winner takes it all</span><span class="song-arrow">→</span></a></li>
-    <li data-q="агутин аэропорты"><a href="songs/agutin-aehroporty-11-11.html"><span class="song-artist">Агутин</span><span class="song-title">Аэропорты</span><span class="song-arrow">→</span></a></li>
-    <li data-q="агутин граница"><a href="songs/agutin-granica-12-12.html"><span class="song-artist">Агутин</span><span class="song-title">Граница</span><span class="song-arrow">→</span></a></li>
-    <li data-q="агутин хоп хей"><a href="songs/agutin-hop-hej-11-13.html"><span class="song-artist">Агутин</span><span class="song-title">Хоп хей</span><span class="song-arrow">→</span></a></li>
-    <li data-q="агутин летний дождь"><a href="songs/agutin-letnij-dozhd-12-12.html"><span class="song-artist">Агутин</span><span class="song-title">Летний дождь</span><span class="song-arrow">→</span></a></li>
-    <li data-q="агутин на сиреневой луне"><a href="songs/agutin-na-sirenevoj-lune-12-12.html"><span class="song-artist">Агутин</span><span class="song-title">На сиреневой луне</span><span class="song-arrow">→</span></a></li>
-    <li data-q="агутин остров"><a href="songs/agutin-ostrov-11-13.html"><span class="song-artist">Агутин</span><span class="song-title">Остров</span><span class="song-arrow">→</span></a></li>
-    <li data-q="агутин половина сердца"><a href="songs/agutin-polovina-serdca-11-13.html"><span class="song-artist">Агутин</span><span class="song-title">Половина сердца</span><span class="song-arrow">→</span></a></li>
-    <li data-q="аллегрова с днём рождения"><a href="songs/allegrova-s-dnyom-rozhdeniya-11-13.html"><span class="song-artist">Аллегрова</span><span class="song-title">С днём рождения</span><span class="song-arrow">→</span></a></li>
-    <li data-q="аллегрова угонщица"><a href="songs/allegrova-ugonshchica-11-13.html"><span class="song-artist">Аллегрова</span><span class="song-title">Угонщица</span><span class="song-arrow">→</span></a></li>
-    <li data-q="альянс на заре"><a href="songs/alyans-na-zare-11-13.html"><span class="song-artist">Альянс</span><span class="song-title">На заре</span><span class="song-arrow">→</span></a></li>
-    <li data-q="амега лететь"><a href="songs/amega-letet-11-13.html"><span class="song-artist">Амега</span><span class="song-title">Лететь</span><span class="song-arrow">→</span></a></li>
-    <li data-q="анна асти царица"><a href="songs/anna-asti-carica-11-13.html"><span class="song-artist">Анна Асти</span><span class="song-title">Царица</span><span class="song-arrow">→</span></a></li>
-    <li data-q="анна герман а он мне нравится"><a href="songs/anna-german-a-on-mne-nravitsya-12-12.html"><span class="song-artist">Анна Герман</span><span class="song-title">А он мне нравится</span><span class="song-arrow">→</span></a></li>
-    <li data-q="анна герман эхо любви"><a href="songs/anna-german-ehho-lyubvi-12-12.html"><span class="song-artist">Анна Герман</span><span class="song-title">Эхо Любви</span><span class="song-arrow">→</span></a></li>
-    <li data-q="анна герман город влюбленных людей"><a href="songs/anna-german-gorod-vlyublennyh-lyudej-12-12.html"><span class="song-artist">Анна Герман</span><span class="song-title">Город влюбленных людей</span><span class="song-arrow">→</span></a></li>
-    <li data-q="анна герман надежда"><a href="songs/anna-german-nadezhda-12-12.html"><span class="song-artist">Анна Герман</span><span class="song-title">Надежда</span><span class="song-arrow">→</span></a></li>
-    <li data-q="антонов мечта сбывается"><a href="songs/antonov-mechta-sbyvaetsya-11-11.html"><span class="song-artist">Антонов</span><span class="song-title">Мечта сбывается</span><span class="song-arrow">→</span></a></li>
-    <li data-q="ария беспечный ангел"><a href="songs/ariya-bespechnyj-angel-11-11.html"><span class="song-artist">Ария</span><span class="song-title">Беспечный ангел</span><span class="song-arrow">→</span></a></li>
-    <li data-q="ария потерянный рай"><a href="songs/ariya-poteryannyj-raj-12-12.html"><span class="song-artist">Ария</span><span class="song-title">Потерянный рай</span><span class="song-arrow">→</span></a></li>
-    <li data-q="ария штиль"><a href="songs/ariya-shtil-11-11.html"><span class="song-artist">Ария</span><span class="song-title">Штиль</span><span class="song-arrow">→</span></a></li>
-    <li data-q="смешарики от винта (смешband)"><a href="songs/band.html"><span class="song-artist">Смешарики</span><span class="song-title">От Винта (СмешBand)</span><span class="song-arrow">→</span></a></li>
-    <li data-q="баста медлячок"><a href="songs/basta-medlyachok-11-11.html"><span class="song-artist">Баста</span><span class="song-title">Медлячок</span><span class="song-arrow">→</span></a></li>
-    <li data-q="баста сансара"><a href="songs/basta-sansara-11-11.html"><span class="song-artist">Баста</span><span class="song-title">Сансара</span><span class="song-arrow">→</span></a></li>
-    <li data-q="магомаев bella, ciao"><a href="songs/bella-ciao.html"><span class="song-artist">Магомаев</span><span class="song-title">Bella, ciao</span><span class="song-arrow">→</span></a></li>
-    <li data-q="билан держи"><a href="songs/bilan-derzhi-11-11.html"><span class="song-artist">Билан</span><span class="song-title">Держи</span><span class="song-arrow">→</span></a></li>
-    <li data-q="билан невозможное возможно"><a href="songs/bilan-nevozmozhnoe-vozmozhno-11-11.html"><span class="song-artist">Билан</span><span class="song-title">Невозможное возможно</span><span class="song-arrow">→</span></a></li>
-    <li data-q="боярский зеленоглазое такси"><a href="songs/boyarskij-zelenoglazoe-taksi-11-11.html"><span class="song-artist">Боярский</span><span class="song-title">Зеленоглазое Такси</span><span class="song-arrow">→</span></a></li>
-    <li data-q="братья грим кустурица"><a href="songs/bratya-grim-kusturica-11-11.html"><span class="song-artist">Братья Грим</span><span class="song-title">Кустурица</span><span class="song-arrow">→</span></a></li>
-    <li data-q="братья грим ресницы"><a href="songs/bratya-grim-resnicy-11-11.html"><span class="song-artist">Братья Грим</span><span class="song-title">Ресницы</span><span class="song-arrow">→</span></a></li>
-    <li data-q="браво черный кот"><a href="songs/bravo-chernyj-kot-11-11.html"><span class="song-artist">Браво</span><span class="song-title">Черный кот</span><span class="song-arrow">→</span></a></li>
-    <li data-q="браво дорога в облака"><a href="songs/bravo-doroga-v-oblaka-11-11.html"><span class="song-artist">Браво</span><span class="song-title">Дорога в облака</span><span class="song-arrow">→</span></a></li>
-    <li data-q="браво любите, девушки!"><a href="songs/bravo-lyubite-devushki-11-11.html"><span class="song-artist">Браво</span><span class="song-title">Любите, девушки!</span><span class="song-arrow">→</span></a></li>
-    <li data-q="бременские баю баюшки баю"><a href="songs/bremenskie-bayu-bayushki-bayu-12-12.html"><span class="song-artist">Бременские</span><span class="song-title">Баю баюшки баю</span><span class="song-arrow">→</span></a></li>
-    <li data-q="бременские говорят мы бяки буки"><a href="songs/bremenskie-govoryat-my-byaki-buki-12-12.html"><span class="song-artist">Бременские</span><span class="song-title">Говорят мы бяки буки</span><span class="song-arrow">→</span></a></li>
-    <li data-q="бременские луч солнца золотого"><a href="songs/bremenskie-luch-solnca-zolotogo-12-12.html"><span class="song-artist">Бременские</span><span class="song-title">Луч солнца золотого</span><span class="song-arrow">→</span></a></li>
-    <li data-q="бременские мы к вам заехали на час"><a href="songs/bremenskie-my-k-vam-zaehali-na-chas-12-12.html"><span class="song-artist">Бременские</span><span class="song-title">Мы к вам заехали на час</span><span class="song-arrow">→</span></a></li>
-    <li data-q="бременские ничего на свете лучше нету"><a href="songs/bremenskie-nichego-na-svete-luchshe-netu-12-12.html"><span class="song-artist">Бременские</span><span class="song-title">Ничего на свете лучше нету</span><span class="song-arrow">→</span></a></li>
-    <li data-q="бумбокс вахтерам"><a href="songs/bumboks-vahteram-11-11.html"><span class="song-artist">Бумбокс</span><span class="song-title">Вахтерам</span><span class="song-arrow">→</span></a></li>
-    <li data-q="кинопесни снежинка"><a href="songs/charodei-snezhinka-12-25.html"><span class="song-artist">Кинопесни</span><span class="song-title">Снежинка</span><span class="song-arrow">→</span></a></li>
-    <li data-q="чиж&co. о любви"><a href="songs/co.html"><span class="song-artist">Чиж&co.</span><span class="song-title">О любви</span><span class="song-arrow">→</span></a></li>
-    <li data-q="цветы мы желаем счастья вам"><a href="songs/cvety-my-zhelaem-schastya-vam-12-12.html"><span class="song-artist">Цветы</span><span class="song-title">Мы желаем счастья вам</span><span class="song-arrow">→</span></a></li>
-    <li data-q="женя белоусов девчонка-девчоночка"><a href="songs/devchonka-devchonochka-11-14.html"><span class="song-artist">Женя Белоусов</span><span class="song-title">Девчонка-девчоночка</span><span class="song-arrow">→</span></a></li>
-    <li data-q="дунаевский ветер перемен"><a href="songs/dunaevskij-veter-peremen-11-11.html"><span class="song-artist">Дунаевский</span><span class="song-title">Ветер перемен</span><span class="song-arrow">→</span></a></li>
-    <li data-q="джарахов я в моменте"><a href="songs/dzharakhov-dzharahov-markul-ya-v-momente-11-13.html"><span class="song-artist">Джарахов</span><span class="song-title">Я В Моменте</span><span class="song-arrow">→</span></a></li>
-    <li data-q="егор крид моя невеста"><a href="songs/egor-krid-moya-nevesta-11-11.html"><span class="song-artist">Егор Крид</span><span class="song-title">Моя невеста</span><span class="song-arrow">→</span></a></li>
-    <li data-q="егор крид самая-самая"><a href="songs/egor-krid-samaya-samaya-11-11.html"><span class="song-artist">Егор Крид</span><span class="song-title">Самая-самая</span><span class="song-arrow">→</span></a></li>
-    <li data-q="евдокимов фантазёр"><a href="songs/evdokimov-fantazyor-11-11.html"><span class="song-artist">Евдокимов</span><span class="song-title">Фантазёр</span><span class="song-arrow">→</span></a></li>
-    <li data-q="барт ховард fly me to the moon"><a href="songs/fly-me-to-the-moon.html"><span class="song-artist">Барт Ховард</span><span class="song-title">Fly me to the moon</span><span class="song-arrow">→</span></a></li>
-    <li data-q="градский как молоды мы были"><a href="songs/gradskij-kak-molody-my-byli-12-12.html"><span class="song-artist">Градский</span><span class="song-title">Как молоды мы были</span><span class="song-arrow">→</span></a></li>
-    <li data-q="градский песня моряка"><a href="songs/gradskij-pesnya-moryaka-12-12.html"><span class="song-artist">Градский</span><span class="song-title">Песня моряка</span><span class="song-arrow">→</span></a></li>
-    <li data-q="градский песня о друге"><a href="songs/gradskij-pesnya-o-druge-12-12.html"><span class="song-artist">Градский</span><span class="song-title">Песня о друге</span><span class="song-arrow">→</span></a></li>
-    <li data-q="градский рыба пила"><a href="songs/gradskij-ryba-pila-12-12.html"><span class="song-artist">Градский</span><span class="song-title">Рыба пила</span><span class="song-arrow">→</span></a></li>
-    <li data-q="губин ночь"><a href="songs/gubin-noch-12-25.html"><span class="song-artist">Губин</span><span class="song-title">Ночь</span><span class="song-arrow">→</span></a></li>
-    <li data-q="губин зима-холода"><a href="songs/gubin-zima-holoda-12-25.html"><span class="song-artist">Губин</span><span class="song-title">Зима-холода</span><span class="song-arrow">→</span></a></li>
-    <li data-q="зацепин губит людей не пиво"><a href="songs/gubit-lyudej-ne-pivo-11-11.html"><span class="song-artist">Зацепин</span><span class="song-title">Губит людей не пиво</span><span class="song-arrow">→</span></a></li>
-    <li data-q="перси мэйфилд hit the road, jack"><a href="songs/hit-the-road-jack.html"><span class="song-artist">Перси Мэйфилд</span><span class="song-title">Hit the road, Jack</span><span class="song-arrow">→</span></a></li>
-    <li data-q="хренников московские окна"><a href="songs/hrennikov-moskovskie-okna-12-12.html"><span class="song-artist">Хренников</span><span class="song-title">Московские окна</span><span class="song-arrow">→</span></a></li>
-    <li data-q="улыбайся iowa"><a href="songs/iowa.html"><span class="song-artist">Улыбайся</span><span class="song-title">IOWA</span><span class="song-arrow">→</span></a></li>
-    <li data-q="иванушки и только дождь стучит"><a href="songs/ivanushki-i-tolko-dozhd-stuchit-11-13.html"><span class="song-artist">Иванушки</span><span class="song-title">И только дождь стучит</span><span class="song-arrow">→</span></a></li>
-    <li data-q="иванушки тополиный пух"><a href="songs/ivanushki-topolinyj-puh-11-11.html"><span class="song-artist">Иванушки</span><span class="song-title">Тополиный пух</span><span class="song-arrow">→</span></a></li>
-    <li data-q="кадышева плывёт веночек"><a href="songs/kadysheva-plyvyot-venochek-12-12.html"><span class="song-artist">Кадышева</span><span class="song-title">Плывёт веночек</span><span class="song-arrow">→</span></a></li>
-    <li data-q="кадышева широка река"><a href="songs/kadysheva-shiroka-reka-12-12.html"><span class="song-artist">Кадышева</span><span class="song-title">Широка река</span><span class="song-arrow">→</span></a></li>
-    <li data-q="кадышева течет ручей"><a href="songs/kadysheva-techet-ruchej-12-12.html"><span class="song-artist">Кадышева</span><span class="song-title">Течет ручей</span><span class="song-arrow">→</span></a></li>
-    <li data-q="камбурова маленький принц"><a href="songs/kamburova-malenkij-princ-12-12.html"><span class="song-artist">Камбурова</span><span class="song-title">Маленький принц</span><span class="song-arrow">→</span></a></li>
-    <li data-q="кино группа крови"><a href="songs/kino-gruppa-krovi-11-11.html"><span class="song-artist">Кино</span><span class="song-title">Группа крови</span><span class="song-arrow">→</span></a></li>
-    <li data-q="кино кукушка"><a href="songs/kino-kukushka-11-11.html"><span class="song-artist">Кино</span><span class="song-title">Кукушка</span><span class="song-arrow">→</span></a></li>
-    <li data-q="кино пачка сигарет"><a href="songs/kino-pachka-sigaret-11-11.html"><span class="song-artist">Кино</span><span class="song-title">Пачка сигарет</span><span class="song-arrow">→</span></a></li>
-    <li data-q="кино видели ночь"><a href="songs/kino-videli-noch-11-13.html"><span class="song-artist">Кино</span><span class="song-title">Видели ночь</span><span class="song-arrow">→</span></a></li>
-    <li data-q="кино восьмиклассница"><a href="songs/kino-vosmiklassnica-11-13.html"><span class="song-artist">Кино</span><span class="song-title">Восьмиклассница</span><span class="song-arrow">→</span></a></li>
-    <li data-q="кино звезда по имени солнце"><a href="songs/kino-zvezda-po-imeni-solnce-11-11.html"><span class="song-artist">Кино</span><span class="song-title">Звезда по имени солнце</span><span class="song-arrow">→</span></a></li>
-    <li data-q="кинопесни александра"><a href="songs/kinopesni-aleksandra-12-12.html"><span class="song-artist">Кинопесни</span><span class="song-title">Александра</span><span class="song-arrow">→</span></a></li>
-    <li data-q="кинопесни есть только миг"><a href="songs/kinopesni-est-tolko-mig-12-12.html"><span class="song-artist">Кинопесни</span><span class="song-title">Есть только миг</span><span class="song-arrow">→</span></a></li>
-    <li data-q="кинопесни кабы не было зимы"><a href="songs/kinopesni-kaby-ne-bylo-zimy-12-25.html"><span class="song-artist">Кинопесни</span><span class="song-title">Кабы не было зимы</span><span class="song-arrow">→</span></a></li>
-    <li data-q="кинопесни песенка о медведях (где-то на белом свете)"><a href="songs/kinopesni-pesenka-o-medvedyah-gde-to-na-belom-svete-12-12.html"><span class="song-artist">Кинопесни</span><span class="song-title">Песенка о медведях (где-то на белом свете)</span><span class="song-arrow">→</span></a></li>
-    <li data-q="кинопесни постой, паровоз"><a href="songs/kinopesni-postoj-parovoz-12-12.html"><span class="song-artist">Кинопесни</span><span class="song-title">Постой, паровоз</span><span class="song-arrow">→</span></a></li>
-    <li data-q="кинопесни три белых коня"><a href="songs/kinopesni-tri-belyh-konya-12-12.html"><span class="song-artist">Кинопесни</span><span class="song-title">Три белых коня</span><span class="song-arrow">→</span></a></li>
-    <li data-q="кинопесни ты мне веришь?"><a href="songs/kinopesni-ty-mne-verish-12-12.html"><span class="song-artist">Кинопесни</span><span class="song-title">Ты мне веришь?</span><span class="song-arrow">→</span></a></li>
-    <li data-q="кинопесни я иду шагаю по москве"><a href="songs/kinopesni-ya-idu-shagayu-po-moskve-12-12.html"><span class="song-artist">Кинопесни</span><span class="song-title">Я иду шагаю по Москве</span><span class="song-arrow">→</span></a></li>
-    <li data-q="кинопесни звенит январская вьюга"><a href="songs/kinopesni-zvenit-yanvarskaya-vyuga-12-12.html"><span class="song-artist">Кинопесни</span><span class="song-title">Звенит январская вьюга</span><span class="song-arrow">→</span></a></li>
-    <li data-q="кипелов я свободен"><a href="songs/kipelov-ya-svoboden-11-11.html"><span class="song-artist">Кипелов</span><span class="song-title">Я свободен</span><span class="song-arrow">→</span></a></li>
-    <li data-q="киркоров цвет настроения синий"><a href="songs/kirkorov-cvet-nastroeniya-sinij-11-11.html"><span class="song-artist">Киркоров</span><span class="song-title">Цвет настроения синий</span><span class="song-arrow">→</span></a></li>
-    <li data-q="киркоров снег"><a href="songs/kirkorov-sneg-11-11.html"><span class="song-artist">Киркоров</span><span class="song-title">Снег</span><span class="song-arrow">→</span></a></li>
-    <li data-q="киркоров я эту жизнь тебе отдам"><a href="songs/kirkorov-ya-ehtu-zhizn-tebe-otdam-11-13.html"><span class="song-artist">Киркоров</span><span class="song-title">Я эту жизнь тебе отдам</span><span class="song-arrow">→</span></a></li>
-    <li data-q="комбинация бухгалтер"><a href="songs/kombinaciya-buhgalter-11-13.html"><span class="song-artist">Комбинация</span><span class="song-title">Бухгалтер</span><span class="song-arrow">→</span></a></li>
-    <li data-q="комбинация два кусочка колбаски"><a href="songs/kombinaciya-dva-kusochka-kolbaski-11-13.html"><span class="song-artist">Комбинация</span><span class="song-title">Два кусочка колбаски</span><span class="song-arrow">→</span></a></li>
-    <li data-q="корнелюк дожди"><a href="songs/kornelyuk-dozhdi-11-11.html"><span class="song-artist">Корнелюк</span><span class="song-title">Дожди</span><span class="song-arrow">→</span></a></li>
-    <li data-q="корнелюк город которого нет"><a href="songs/kornelyuk-gorod-kotorogo-net-11-11.html"><span class="song-artist">Корнелюк</span><span class="song-title">Город которого нет</span><span class="song-arrow">→</span></a></li>
-    <li data-q="король и шут ели мясо мужики"><a href="songs/korol-i-shut-eli-myaso-muzhiki-11-11.html"><span class="song-artist">Король и Шут</span><span class="song-title">Ели мясо мужики</span><span class="song-arrow">→</span></a></li>
-    <li data-q="король и шут кукла колдуна"><a href="songs/korol-i-shut-kukla-kolduna-11-11.html"><span class="song-artist">Король и Шут</span><span class="song-title">Кукла колдуна</span><span class="song-arrow">→</span></a></li>
-    <li data-q="король и шут лесник"><a href="songs/korol-i-shut-lesnik-11-11.html"><span class="song-artist">Король и Шут</span><span class="song-title">Лесник</span><span class="song-arrow">→</span></a></li>
-    <li data-q="король и шут прыгну со скалы"><a href="songs/korol-i-shut-prygnu-so-skaly-11-11.html"><span class="song-artist">Король и Шут</span><span class="song-title">Прыгну со скалы</span><span class="song-arrow">→</span></a></li>
-    <li data-q="король и шут ром"><a href="songs/korol-i-shut-rom-11-13.html"><span class="song-artist">Король и Шут</span><span class="song-title">Ром</span><span class="song-arrow">→</span></a></li>
-    <li data-q="крис кельми замыкая круг"><a href="songs/kris-kelmi-zamykaya-krug-12-12.html"><span class="song-artist">Крис Кельми</span><span class="song-title">Замыкая круг</span><span class="song-arrow">→</span></a></li>
-    <li data-q="крылатов крылатые качели"><a href="songs/krylatov-krylatye-kacheli-11-11.html"><span class="song-artist">Крылатов</span><span class="song-title">Крылатые качели</span><span class="song-arrow">→</span></a></li>
-    <li data-q="крылатов прекрасное далеко"><a href="songs/krylatov-prekrasnoe-daleko-11-11.html"><span class="song-artist">Крылатов</span><span class="song-title">Прекрасное далеко</span><span class="song-arrow">→</span></a></li>
-    <li data-q="ласковый май белые розы"><a href="songs/laskovyj-maj-belye-rozy-11-11.html"><span class="song-artist">Ласковый май</span><span class="song-title">Белые розы</span><span class="song-arrow">→</span></a></li>
-    <li data-q="ласковый май розовый вечер"><a href="songs/laskovyj-maj-rozovyj-vecher-12-12.html"><span class="song-artist">Ласковый май</span><span class="song-title">Розовый вечер</span><span class="song-arrow">→</span></a></li>
-    <li data-q="ласковый май седая ночь"><a href="songs/laskovyj-maj-sedaya-noch-11-11.html"><span class="song-artist">Ласковый май</span><span class="song-title">Седая ночь</span><span class="song-arrow">→</span></a></li>
-    <li data-q="ленинград экспонат"><a href="songs/leningrad-ehksponat-11-11.html"><span class="song-artist">Ленинград</span><span class="song-title">Экспонат</span><span class="song-arrow">→</span></a></li>
-    <li data-q="ленинград вояж"><a href="songs/leningrad-voyazh-11-13.html"><span class="song-artist">Ленинград</span><span class="song-title">Вояж</span><span class="song-arrow">→</span></a></li>
-    <li data-q="леонтьев дельтаплан"><a href="songs/leontev-deltaplan-11-13.html"><span class="song-artist">Леонтьев</span><span class="song-title">Дельтаплан</span><span class="song-arrow">→</span></a></li>
-    <li data-q="лепс натали"><a href="songs/leps-natali-11-13.html"><span class="song-artist">Лепс</span><span class="song-title">Натали</span><span class="song-arrow">→</span></a></li>
-    <li data-q="лепс обернитесь"><a href="songs/leps-obernites-11-11.html"><span class="song-artist">Лепс</span><span class="song-title">Обернитесь</span><span class="song-arrow">→</span></a></li>
-    <li data-q="лепс рюмка водки на столе"><a href="songs/leps-ryumka-vodki-na-stole-11-11.html"><span class="song-artist">Лепс</span><span class="song-title">Рюмка водки на столе</span><span class="song-arrow">→</span></a></li>
-    <li data-q="лепс самый лучший день"><a href="songs/leps-samyj-luchshij-den-11-11.html"><span class="song-artist">Лепс</span><span class="song-title">Самый лучший день</span><span class="song-arrow">→</span></a></li>
-    <li data-q="лепс я поднимаю руки"><a href="songs/leps-ya-podnimayu-ruki-11-13.html"><span class="song-artist">Лепс</span><span class="song-title">Я поднимаю руки</span><span class="song-arrow">→</span></a></li>
-    <li data-q="лепс я счастливый"><a href="songs/leps-ya-schastlivyj-11-11.html"><span class="song-artist">Лепс</span><span class="song-title">Я счастливый</span><span class="song-arrow">→</span></a></li>
-    <li data-q="лепс зеркала"><a href="songs/leps-zerkala-11-11.html"><span class="song-artist">Лепс</span><span class="song-title">Зеркала</span><span class="song-arrow">→</span></a></li>
-    <li data-q="любэ а река течет"><a href="songs/lyubeh-a-reka-techet-11-13.html"><span class="song-artist">Любэ</span><span class="song-title">А река течет</span><span class="song-arrow">→</span></a></li>
-    <li data-q="любэ берёзы"><a href="songs/lyubeh-beryozy-11-13.html"><span class="song-artist">Любэ</span><span class="song-title">Берёзы</span><span class="song-arrow">→</span></a></li>
-    <li data-q="любэ комбат"><a href="songs/lyubeh-kombat-11-13.html"><span class="song-artist">Любэ</span><span class="song-title">Комбат</span><span class="song-arrow">→</span></a></li>
-    <li data-q="любэ конь"><a href="songs/lyubeh-kon-11-11.html"><span class="song-artist">Любэ</span><span class="song-title">Конь</span><span class="song-arrow">→</span></a></li>
-    <li data-q="любэ позови меня тихо по имени"><a href="songs/lyubeh-pozovi-menya-tiho-po-imeni-11-13.html"><span class="song-artist">Любэ</span><span class="song-title">Позови меня тихо по имени</span><span class="song-arrow">→</span></a></li>
-    <li data-q="любэ ребята с нашего двора"><a href="songs/lyubeh-rebyata-s-nashego-dvora-11-13.html"><span class="song-artist">Любэ</span><span class="song-title">Ребята с нашего двора</span><span class="song-arrow">→</span></a></li>
-    <li data-q="любэ там, за туманами"><a href="songs/lyubeh-tam-za-tumanami-11-13.html"><span class="song-artist">Любэ</span><span class="song-title">Там, за туманами</span><span class="song-arrow">→</span></a></li>
-    <li data-q="магомаев чертово колесо"><a href="songs/magomaev-chertovo-koleso-12-12.html"><span class="song-artist">Магомаев</span><span class="song-title">Чертово колесо</span><span class="song-arrow">→</span></a></li>
-    <li data-q="магомаев королева красоты"><a href="songs/magomaev-koroleva-krasoty-12-12.html"><span class="song-artist">Магомаев</span><span class="song-title">Королева красоты</span><span class="song-arrow">→</span></a></li>
-    <li data-q="магомаев лучший город земли"><a href="songs/magomaev-luchshij-gorod-zemli-12-12.html"><span class="song-artist">Магомаев</span><span class="song-title">Лучший город земли</span><span class="song-arrow">→</span></a></li>
-    <li data-q="магомаев синяя вечность"><a href="songs/magomaev-sinyaya-vechnost-12-12.html"><span class="song-artist">Магомаев</span><span class="song-title">Синяя вечность</span><span class="song-arrow">→</span></a></li>
-    <li data-q="магомаев свадьба"><a href="songs/magomaev-svadba-12-12.html"><span class="song-artist">Магомаев</span><span class="song-title">Свадьба</span><span class="song-arrow">→</span></a></li>
-    <li data-q="магомаев песня о далекой родине"><a href="songs/magomav-pesnya-o-dalekoj-rodine-12-12.html"><span class="song-artist">Магомаев</span><span class="song-title">Песня о далекой родине</span><span class="song-arrow">→</span></a></li>
-    <li data-q="макс корж жить в кайф"><a href="songs/maks-korzh-zhit-v-kajf-11-11.html"><span class="song-artist">Макс Корж</span><span class="song-title">Жить в кайф</span><span class="song-arrow">→</span></a></li>
-    <li data-q="машина времени мой друг"><a href="songs/mashina-vremeni-moj-drug-11-11.html"><span class="song-artist">Машина времени</span><span class="song-title">Мой друг</span><span class="song-arrow">→</span></a></li>
-    <li data-q="машина времени поворот"><a href="songs/mashina-vremeni-povorot-11-11.html"><span class="song-artist">Машина времени</span><span class="song-title">Поворот</span><span class="song-arrow">→</span></a></li>
-    <li data-q="меладзе красиво"><a href="songs/meladze-krasivo-11-11.html"><span class="song-artist">Меладзе</span><span class="song-title">Красиво</span><span class="song-arrow">→</span></a></li>
-    <li data-q="меладзе небеса"><a href="songs/meladze-nebesa-11-11.html"><span class="song-artist">Меладзе</span><span class="song-title">Небеса</span><span class="song-arrow">→</span></a></li>
-    <li data-q="меладзе самба белого мотылька"><a href="songs/meladze-samba-belogo-motylka-11-11.html"><span class="song-artist">Меладзе</span><span class="song-title">Самба белого мотылька</span><span class="song-arrow">→</span></a></li>
-    <li data-q="меладзе вера"><a href="songs/meladze-vera-11-11.html"><span class="song-artist">Меладзе</span><span class="song-title">Вера</span><span class="song-arrow">→</span></a></li>
-    <li data-q="мираж музыка нас связала"><a href="songs/mirazh-muzyka-nas-svyazala-11-11.html"><span class="song-artist">Мираж</span><span class="song-title">Музыка нас связала</span><span class="song-arrow">→</span></a></li>
-    <li data-q="народная черный ворон"><a href="songs/narodnaya-chernyj-voron-11-11.html"><span class="song-artist">Народная</span><span class="song-title">Черный ворон</span><span class="song-arrow">→</span></a></li>
-    <li data-q="народная ой, то не вечер"><a href="songs/narodnaya-oj-to-ne-vecher-11-11.html"><span class="song-artist">Народная</span><span class="song-title">Ой, то не вечер</span><span class="song-arrow">→</span></a></li>
-    <li data-q="натали ветер с моря дул"><a href="songs/natali-veter-s-morya-dul-11-11.html"><span class="song-artist">Натали</span><span class="song-title">Ветер с моря дул</span><span class="song-arrow">→</span></a></li>
-    <li data-q="никольский музыкант"><a href="songs/nikolskij-muzykant-11-14.html"><span class="song-artist">Никольский</span><span class="song-title">Музыкант</span><span class="song-arrow">→</span></a></li>
-    <li data-q="носков это здорово"><a href="songs/noskov-ehto-zdorovo-11-11.html"><span class="song-artist">Носков</span><span class="song-title">Это здорово</span><span class="song-arrow">→</span></a></li>
-    <li data-q="отпетые мошенники люби меня люби"><a href="songs/otpetye-moshenniki-lyubi-menya-lyubi-11-11.html"><span class="song-artist">Отпетые мошенники</span><span class="song-title">Люби меня люби</span><span class="song-arrow">→</span></a></li>
-    <li data-q="пахмутова до свиданья, москва"><a href="songs/pahmutova-do-svidanya-moskva-12-12.html"><span class="song-artist">Пахмутова</span><span class="song-title">До свиданья, Москва</span><span class="song-arrow">→</span></a></li>
-    <li data-q="толкунова песенка без конца"><a href="songs/pesenka-bez-konca-12-12.html"><span class="song-artist">Толкунова</span><span class="song-title">Песенка без конца</span><span class="song-arrow">→</span></a></li>
-    <li data-q="кинопесни песенка про зайцев"><a href="songs/pesenka-pro-zajcev-11-11.html"><span class="song-artist">Кинопесни</span><span class="song-title">Песенка про зайцев</span><span class="song-arrow">→</span></a></li>
-    <li data-q="песни военных лет катюша"><a href="songs/pesni-voennyh-let-katyusha-12-12.html"><span class="song-artist">Песни военных лет</span><span class="song-title">Катюша</span><span class="song-arrow">→</span></a></li>
-    <li data-q="песни военных лет казаки (в берлине)"><a href="songs/pesni-voennyh-let-kazaki-v-berline-12-12.html"><span class="song-artist">Песни военных лет</span><span class="song-title">Казаки (в Берлине)</span><span class="song-arrow">→</span></a></li>
-    <li data-q="песни военных лет на поле танки грохотали"><a href="songs/pesni-voennyh-let-na-pole-tanki-grohotali-12-12.html"><span class="song-artist">Песни военных лет</span><span class="song-title">На поле танки грохотали</span><span class="song-arrow">→</span></a></li>
-    <li data-q="песни военных лет синий платочек"><a href="songs/pesni-voennyh-let-sinij-platochek-12-12.html"><span class="song-artist">Песни военных лет</span><span class="song-title">Синий платочек</span><span class="song-arrow">→</span></a></li>
-    <li data-q="песни военных лет случайный вальс"><a href="songs/pesni-voennyh-let-sluchajnyj-vals-12-12.html"><span class="song-artist">Песни военных лет</span><span class="song-title">Случайный вальс</span><span class="song-arrow">→</span></a></li>
-    <li data-q="песни военных лет вечер на рейде"><a href="songs/pesni-voennyh-let-vecher-na-rejde-12-12.html"><span class="song-artist">Песни военных лет</span><span class="song-title">Вечер на рейде</span><span class="song-arrow">→</span></a></li>
-    <li data-q="песняры беловежская пуща"><a href="songs/pesnyary-belovezhskaya-12-12.html"><span class="song-artist">Песняры</span><span class="song-title">Беловежская пуща</span><span class="song-arrow">→</span></a></li>
-    <li data-q="песняры вологда"><a href="songs/pesnyary-vologda-12-12.html"><span class="song-artist">Песняры</span><span class="song-title">Вологда</span><span class="song-arrow">→</span></a></li>
-    <li data-q="порнофильмы я так соскучился"><a href="songs/pornofilmy-ya-tak-soskuchilsya-11-11.html"><span class="song-artist">Порнофильмы</span><span class="song-title">Я так соскучился</span><span class="song-arrow">→</span></a></li>
-    <li data-q="пресняков зурбаган"><a href="songs/presnyakov-zurbagan-12-12.html"><span class="song-artist">Пресняков</span><span class="song-title">Зурбаган</span><span class="song-arrow">→</span></a></li>
+    <li data-q=" fly me to the moon"><a href="songs/fly-me-to-the-moon.html"><span class="song-artist" style="opacity:0">—</span><span class="song-title">Fly me to the moon</span><span class="song-arrow">→</span></a></li>
+    <li data-q=" hit the road, jack"><a href="songs/hit-the-road-jack.html"><span class="song-artist" style="opacity:0">—</span><span class="song-title">Hit the road, Jack</span><span class="song-arrow">→</span></a></li>
     <li data-q="queen the show must go on"><a href="songs/queen-the-show-must-go-on.html"><span class="song-artist">Queen</span><span class="song-title">The Show Must Go On</span><span class="song-arrow">→</span></a></li>
-    <li data-q="рекорд оркестр лада седан"><a href="songs/rekord-orkestr-lada-sedan-11-11.html"><span class="song-artist">Рекорд Оркестр</span><span class="song-title">Лада Седан</span><span class="song-arrow">→</span></a></li>
-    <li data-q="виа веселые ребята розовые розы"><a href="songs/rozovye-rozy-12-12.html"><span class="song-artist">ВИА Веселые ребята</span><span class="song-title">Розовые розы</span><span class="song-arrow">→</span></a></li>
-    <li data-q="руки вверх крошка моя"><a href="songs/ruki-vverh-kroshka-moya-11-11.html"><span class="song-artist">Руки Вверх</span><span class="song-title">крошка моя</span><span class="song-arrow">→</span></a></li>
-    <li data-q="руки вверх восемнадцать мне уже"><a href="songs/ruki-vverh-vosemnadcat-mne-uzhe-11-11.html"><span class="song-artist">Руки Вверх</span><span class="song-title">Восемнадцать мне уже</span><span class="song-arrow">→</span></a></li>
-    <li data-q="самоцветы кто тебе сказал"><a href="songs/samocvety-kto-tebe-skazal-12-12.html"><span class="song-artist">Самоцветы</span><span class="song-title">Кто тебе сказал</span><span class="song-arrow">→</span></a></li>
-    <li data-q="самоцветы мой адрес советский союз"><a href="songs/samocvety-moj-adres-sovetskij-soyuz-12-12.html"><span class="song-artist">Самоцветы</span><span class="song-title">Мой адрес Советский Союз</span><span class="song-arrow">→</span></a></li>
-    <li data-q="самоцветы не надо печалиться"><a href="songs/samocvety-ne-nado-pechalitsya-12-12.html"><span class="song-artist">Самоцветы</span><span class="song-title">Не надо печалиться</span><span class="song-arrow">→</span></a></li>
-    <li data-q="самоцветы обручальное кольцо"><a href="songs/samocvety-obruchalnoe-kolco-12-12.html"><span class="song-artist">Самоцветы</span><span class="song-title">Обручальное кольцо</span><span class="song-arrow">→</span></a></li>
-    <li data-q="самоцветы синий иней"><a href="songs/samocvety-sinij-inej-12-12.html"><span class="song-artist">Самоцветы</span><span class="song-title">Синий иней</span><span class="song-arrow">→</span></a></li>
-    <li data-q="самоцветы всё что в жизни есть у меня"><a href="songs/samocvety-vsyo-chto-v-zhizni-est-u-menya-12-12.html"><span class="song-artist">Самоцветы</span><span class="song-title">Всё что в жизни есть у меня</span><span class="song-arrow">→</span></a></li>
-    <li data-q="саруханов дорогие мои старики"><a href="songs/saruhanov-dorogie-moi-stariki-12-12.html"><span class="song-artist">Саруханов</span><span class="song-title">Дорогие мои старики</span><span class="song-arrow">→</span></a></li>
-    <li data-q="саруханов позади крутой поворот"><a href="songs/saruhanov-pozadi-krutoj-povorot-12-12.html"><span class="song-artist">Саруханов</span><span class="song-title">Позади крутой поворот</span><span class="song-arrow">→</span></a></li>
-    <li data-q="саруханов скрип колеса"><a href="songs/saruhanov-skrip-kolesa-12-12.html"><span class="song-artist">Саруханов</span><span class="song-title">Скрип колеса</span><span class="song-arrow">→</span></a></li>
-    <li data-q="саруханов желаю тебе"><a href="songs/saruhanov-zhelayu-tebe-12-12.html"><span class="song-artist">Саруханов</span><span class="song-title">Желаю тебе</span><span class="song-arrow">→</span></a></li>
     <li data-q="scorpions still loving you"><a href="songs/scorpions-still-loving-you.html"><span class="song-artist">Scorpions</span><span class="song-title">Still Loving You</span><span class="song-arrow">→</span></a></li>
-    <li data-q="серов я люблю тебя до слёз"><a href="songs/serov-ya-lyublyu-tebya-do-slyoz-11-11.html"><span class="song-artist">Серов</span><span class="song-title">Я люблю тебя до слёз</span><span class="song-arrow">→</span></a></li>
-    <li data-q="шаинский голубой вагон"><a href="songs/shainskij-goluboj-vagon-12-12.html"><span class="song-artist">Шаинский</span><span class="song-title">Голубой вагон</span><span class="song-arrow">→</span></a></li>
-    <li data-q="виа пламя (шаинский) идёт солдат по городу"><a href="songs/shainskij-idyot-soldat-po-gorod-12-12.html"><span class="song-artist">ВИА Пламя (Шаинский)</span><span class="song-title">Идёт солдат по городу</span><span class="song-arrow">→</span></a></li>
-    <li data-q="шаинский крейсер аврора"><a href="songs/shainskij-krejser-avrora-12-12.html"><span class="song-artist">Шаинский</span><span class="song-title">Крейсер аврора</span><span class="song-arrow">→</span></a></li>
-    <li data-q="шаинский кузнечик"><a href="songs/shainskij-kuznechik-12-12.html"><span class="song-artist">Шаинский</span><span class="song-title">Кузнечик</span><span class="song-arrow">→</span></a></li>
-    <li data-q="виа пламя на дальней станции сойду"><a href="songs/shainskij-na-dalnej-stancii-sojdu-12-12.html"><span class="song-artist">ВИА Пламя</span><span class="song-title">На дальней станции сойду</span><span class="song-arrow">→</span></a></li>
-    <li data-q="шаинский пусть бегут неуклюже"><a href="songs/shainskij-pust-begut-neuklyuzhe-11-11.html"><span class="song-artist">Шаинский</span><span class="song-title">Пусть бегут неуклюже</span><span class="song-arrow">→</span></a></li>
-    <li data-q="макsim знаешь ли ты"><a href="songs/sim.html"><span class="song-artist">МакSim</span><span class="song-title">Знаешь ли ты</span><span class="song-arrow">→</span></a></li>
-    <li data-q="синяя птица там где клён шумит"><a href="songs/sinyaya-ptica-tam-gde-klyon-shumit-11-11.html"><span class="song-artist">Синяя птица</span><span class="song-title">Там где клён шумит</span><span class="song-arrow">→</span></a></li>
-    <li data-q="скляр комарово"><a href="songs/sklyar-komarovo-12-12.html"><span class="song-artist">Скляр</span><span class="song-title">Комарово</span><span class="song-arrow">→</span></a></li>
-    <li data-q="смысловые галлюцинации вечно молодой"><a href="songs/smyslovye-gallyucinacii-vechno-molodoj-11-11.html"><span class="song-artist">Смысловые галлюцинации</span><span class="song-title">Вечно молодой</span><span class="song-arrow">→</span></a></li>
-    <li data-q="софия рорару луна луна"><a href="songs/sofiya-roraru-luna-luna-11-13.html"><span class="song-artist">София Рорару</span><span class="song-title">Луна Луна</span><span class="song-arrow">→</span></a></li>
-    <li data-q="соловьев-седой подмосковные вечера"><a href="songs/solovev-sedoj-podmoskovnye-vechera-12-12.html"><span class="song-artist">Соловьев-Седой</span><span class="song-title">Подмосковные вечера</span><span class="song-arrow">→</span></a></li>
     <li data-q="sting shape of my heart"><a href="songs/sting-shape-of-my-heart.html"><span class="song-artist">Sting</span><span class="song-title">Shape of My Heart</span><span class="song-arrow">→</span></a></li>
-    <li data-q="тальков чистые пруды"><a href="songs/talkov-chistye-prudy-12-12.html"><span class="song-artist">Тальков</span><span class="song-title">Чистые пруды</span><span class="song-arrow">→</span></a></li>
-    <li data-q="танцы минус город"><a href="songs/tancy-minus-gorod-11-11.html"><span class="song-artist">Танцы минус</span><span class="song-title">Город</span><span class="song-arrow">→</span></a></li>
-    <li data-q="танцы минус половинка"><a href="songs/tancy-minus-polovinka-11-11.html"><span class="song-artist">Танцы минус</span><span class="song-title">Половинка</span><span class="song-arrow">→</span></a></li>
-    <li data-q="матушка (матушка земля)"><a href="songs/tatyana-kurtukova-matushka-11-13.html"><span class="song-artist">Матушка (Матушка</span><span class="song-title">земля)</span><span class="song-arrow">→</span></a></li>
-    <li data-q="фрадкин течёт река волга"><a href="songs/techyot-reka-volga-12-12.html"><span class="song-artist">Фрадкин</span><span class="song-title">Течёт река Волга</span><span class="song-arrow">→</span></a></li>
     <li data-q="the beatles yesterday"><a href="songs/the-beatles-yesterday.html"><span class="song-artist">The Beatles</span><span class="song-title">Yesterday</span><span class="song-arrow">→</span></a></li>
-    <li data-q="the hatters я делаю шаг"><a href="songs/the-hatters.html"><span class="song-artist">The Hatters</span><span class="song-title">Я делаю шаг</span><span class="song-arrow">→</span></a></li>
-    <li data-q="uma2rman ума турман"><a href="songs/uma2rman.html"><span class="song-artist">Uma2rman</span><span class="song-title">Ума Турман</span><span class="song-arrow">→</span></a></li>
-    <li data-q="варум городок (ах как хочется вернуться)"><a href="songs/varum-gorodok-ah-kak-hochetsya-vernutsya-11-11.html"><span class="song-artist">Варум</span><span class="song-title">Городок (ах как хочется вернуться)</span><span class="song-arrow">→</span></a></li>
-    <li data-q="соловьев-седой первым делом самолёты"><a href="songs/vasilij-solovyov-sedoj-potomu-chto-my-piloty-11-13.html"><span class="song-artist">Соловьев-Седой</span><span class="song-title">Первым делом самолёты</span><span class="song-arrow">→</span></a></li>
-    <li data-q="виа веселые ребята люди встречаются"><a href="songs/veselye-rebyata-lyudi-vstrechayutsya-12-12.html"><span class="song-artist">ВИА Веселые ребята</span><span class="song-title">Люди встречаются</span><span class="song-arrow">→</span></a></li>
-    <li data-q="виа пламя снег кружится"><a href="songs/via-plamya-sneg-kruzhitsya-12-12.html"><span class="song-artist">ВИА Пламя</span><span class="song-title">Снег кружится</span><span class="song-arrow">→</span></a></li>
-    <li data-q="виа верасы малиновка"><a href="songs/via-verasy-malinovka-12-12.html"><span class="song-artist">ВИА Верасы</span><span class="song-title">Малиновка</span><span class="song-arrow">→</span></a></li>
-    <li data-q="песни военных лет смуглянка"><a href="songs/voennye-smuglyanka-12-12.html"><span class="song-artist">Песни военных лет</span><span class="song-title">Смуглянка</span><span class="song-arrow">→</span></a></li>
-    <li data-q="ленинград www ленинград"><a href="songs/www.html"><span class="song-artist">Ленинград</span><span class="song-title">WWW Ленинград</span><span class="song-arrow">→</span></a></li>
-    <li data-q="юлиан русский вальс"><a href="songs/yulian-russkij-vals-12-12.html"><span class="song-artist">Юлиан</span><span class="song-title">Русский вальс</span><span class="song-arrow">→</span></a></li>
-    <li data-q="зацепин куда уходит детство?"><a href="songs/zacepin-kuda-uhodit-detstvo-11-11.html"><span class="song-artist">Зацепин</span><span class="song-title">Куда уходит детство?</span><span class="song-arrow">→</span></a></li>
-    <li data-q="земляне трава у дома"><a href="songs/zemlyane-trava-u-doma-11-11.html"><span class="song-artist">Земляне</span><span class="song-title">Трава у дома</span><span class="song-arrow">→</span></a></li>
-    <li data-q="женя трофимов поезда"><a href="songs/zhenya-trofimov-poezda-11-11.html"><span class="song-artist">Женя Трофимов</span><span class="song-title">Поезда</span><span class="song-arrow">→</span></a></li>
-    <li data-q="жуки батарейка"><a href="songs/zhuki-batarejka-11-11.html"><span class="song-artist">Жуки</span><span class="song-title">Батарейка</span><span class="song-arrow">→</span></a></li>
-    <li data-q="звери до скорой встречи"><a href="songs/zveri-do-skoroj-vstrechi-11-11.html"><span class="song-artist">Звери</span><span class="song-title">До скорой встречи</span><span class="song-arrow">→</span></a></li>
-    <li data-q="звери районы кварталы"><a href="songs/zveri-rajony-kvartaly-11-11.html"><span class="song-artist">Звери</span><span class="song-title">Районы Кварталы</span><span class="song-arrow">→</span></a></li>
+    <li data-q="the hatters я делаю шаг"><a href="songs/the-hatters-ya-delayu-shag.html"><span class="song-artist">The Hatters</span><span class="song-title">Я делаю шаг</span><span class="song-arrow">→</span></a></li>
+    <li data-q="uma2rman ума турман"><a href="songs/uma2rman-uma-turman.html"><span class="song-artist">Uma2rman</span><span class="song-title">Ума Турман</span><span class="song-arrow">→</span></a></li>
+    <li data-q="агутин граница"><a href="songs/agutin-granitsa.html"><span class="song-artist">Агутин</span><span class="song-title">Граница</span><span class="song-arrow">→</span></a></li>
+    <li data-q="агутин летний дождь"><a href="songs/agutin-letniy-dozhd.html"><span class="song-artist">Агутин</span><span class="song-title">Летний дождь</span><span class="song-arrow">→</span></a></li>
+    <li data-q="агутин на сиреневой луне"><a href="songs/agutin-na-sirenevoy-lune.html"><span class="song-artist">Агутин</span><span class="song-title">На сиреневой луне</span><span class="song-arrow">→</span></a></li>
+    <li data-q="агутин остров"><a href="songs/agutin-ostrov.html"><span class="song-artist">Агутин</span><span class="song-title">Остров</span><span class="song-arrow">→</span></a></li>
+    <li data-q="агутин половина сердца"><a href="songs/agutin-polovina-serdtsa.html"><span class="song-artist">Агутин</span><span class="song-title">Половина сердца</span><span class="song-arrow">→</span></a></li>
+    <li data-q="агутин хоп хей"><a href="songs/agutin-khop-khey.html"><span class="song-artist">Агутин</span><span class="song-title">Хоп хей</span><span class="song-arrow">→</span></a></li>
+    <li data-q="агутин аэропорты"><a href="songs/agutin-aeroporty.html"><span class="song-artist">Агутин</span><span class="song-title">Аэропорты</span><span class="song-arrow">→</span></a></li>
+    <li data-q="аллегрова с днём рождения"><a href="songs/allegrova-s-dnyom-rozhdeniya.html"><span class="song-artist">Аллегрова</span><span class="song-title">С днём рождения</span><span class="song-arrow">→</span></a></li>
+    <li data-q="аллегрова угонщица"><a href="songs/allegrova-ugonschitsa.html"><span class="song-artist">Аллегрова</span><span class="song-title">Угонщица</span><span class="song-arrow">→</span></a></li>
+    <li data-q="альянс на заре"><a href="songs/alyans-na-zare.html"><span class="song-artist">Альянс</span><span class="song-title">На заре</span><span class="song-arrow">→</span></a></li>
+    <li data-q="амега лететь"><a href="songs/amega-letet.html"><span class="song-artist">Амега</span><span class="song-title">Лететь</span><span class="song-arrow">→</span></a></li>
+    <li data-q="анна асти царица"><a href="songs/anna-asti-tsaritsa.html"><span class="song-artist">Анна Асти</span><span class="song-title">Царица</span><span class="song-arrow">→</span></a></li>
+    <li data-q="анна герман а он мне нравится"><a href="songs/anna-german-a-on-mne-nravitsya.html"><span class="song-artist">Анна Герман</span><span class="song-title">А он мне нравится</span><span class="song-arrow">→</span></a></li>
+    <li data-q="анна герман город влюбленных людей"><a href="songs/anna-german-gorod-vlyublennykh-lyudey.html"><span class="song-artist">Анна Герман</span><span class="song-title">Город влюбленных людей</span><span class="song-arrow">→</span></a></li>
+    <li data-q="анна герман надежда"><a href="songs/anna-german-nadezhda.html"><span class="song-artist">Анна Герман</span><span class="song-title">Надежда</span><span class="song-arrow">→</span></a></li>
+    <li data-q="анна герман эхо любви"><a href="songs/anna-german-ekho-lyubvi.html"><span class="song-artist">Анна Герман</span><span class="song-title">Эхо Любви</span><span class="song-arrow">→</span></a></li>
+    <li data-q="антонов мечта сбывается"><a href="songs/antonov-mechta-sbyvaetsya.html"><span class="song-artist">Антонов</span><span class="song-title">Мечта сбывается</span><span class="song-arrow">→</span></a></li>
+    <li data-q="ария беспечный ангел"><a href="songs/ariya-bespechnyy-angel.html"><span class="song-artist">Ария</span><span class="song-title">Беспечный ангел</span><span class="song-arrow">→</span></a></li>
+    <li data-q="ария потерянный рай"><a href="songs/ariya-poteryannyy-ray.html"><span class="song-artist">Ария</span><span class="song-title">Потерянный рай</span><span class="song-arrow">→</span></a></li>
+    <li data-q="ария штиль"><a href="songs/ariya-shtil.html"><span class="song-artist">Ария</span><span class="song-title">Штиль</span><span class="song-arrow">→</span></a></li>
+    <li data-q="баста медлячок"><a href="songs/basta-medlyachok.html"><span class="song-artist">Баста</span><span class="song-title">Медлячок</span><span class="song-arrow">→</span></a></li>
+    <li data-q="баста сансара"><a href="songs/basta-sansara.html"><span class="song-artist">Баста</span><span class="song-title">Сансара</span><span class="song-arrow">→</span></a></li>
+    <li data-q="билан держи"><a href="songs/bilan-derzhi.html"><span class="song-artist">Билан</span><span class="song-title">Держи</span><span class="song-arrow">→</span></a></li>
+    <li data-q="билан невозможное возможно"><a href="songs/bilan-nevozmozhnoe-vozmozhno.html"><span class="song-artist">Билан</span><span class="song-title">Невозможное возможно</span><span class="song-arrow">→</span></a></li>
+    <li data-q="боярский зеленоглазое такси"><a href="songs/boyarskiy-zelenoglazoe-taksi.html"><span class="song-artist">Боярский</span><span class="song-title">Зеленоглазое Такси</span><span class="song-arrow">→</span></a></li>
+    <li data-q="браво 7 тысяч над землей"><a href="songs/bravo-7-tysyach-nad-zemley.html"><span class="song-artist">Браво</span><span class="song-title">7 тысяч над землей</span><span class="song-arrow">→</span></a></li>
+    <li data-q="браво дорога в облака"><a href="songs/bravo-doroga-v-oblaka.html"><span class="song-artist">Браво</span><span class="song-title">Дорога в облака</span><span class="song-arrow">→</span></a></li>
+    <li data-q="браво любите, девушки!"><a href="songs/bravo-lyubite-devushki.html"><span class="song-artist">Браво</span><span class="song-title">Любите, девушки!</span><span class="song-arrow">→</span></a></li>
+    <li data-q="браво черный кот"><a href="songs/bravo-chernyy-kot.html"><span class="song-artist">Браво</span><span class="song-title">Черный кот</span><span class="song-arrow">→</span></a></li>
+    <li data-q="братья грим ресницы"><a href="songs/bratya-grim-resnitsy.html"><span class="song-artist">Братья Грим</span><span class="song-title">Ресницы</span><span class="song-arrow">→</span></a></li>
+    <li data-q="братья грим кустурица"><a href="songs/bratya-grim-kusturitsa.html"><span class="song-artist">Братья Грим</span><span class="song-title">Кустурица</span><span class="song-arrow">→</span></a></li>
+    <li data-q="бременские баю баюшки баю"><a href="songs/bremenskie-bayu-bayushki-bayu.html"><span class="song-artist">Бременские</span><span class="song-title">Баю баюшки баю</span><span class="song-arrow">→</span></a></li>
+    <li data-q="бременские говорят мы бяки буки"><a href="songs/bremenskie-govoryat-my-byaki-buki.html"><span class="song-artist">Бременские</span><span class="song-title">Говорят мы бяки буки</span><span class="song-arrow">→</span></a></li>
+    <li data-q="бременские луч солнца золотого"><a href="songs/bremenskie-luch-solntsa-zolotogo.html"><span class="song-artist">Бременские</span><span class="song-title">Луч солнца золотого</span><span class="song-arrow">→</span></a></li>
+    <li data-q="бременские мы к вам заехали на час"><a href="songs/bremenskie-my-k-vam-zaekhali-na-chas.html"><span class="song-artist">Бременские</span><span class="song-title">Мы к вам заехали на час</span><span class="song-arrow">→</span></a></li>
+    <li data-q="бременские ничего на свете лучше нету"><a href="songs/bremenskie-nichego-na-svete-luchshe-netu.html"><span class="song-artist">Бременские</span><span class="song-title">Ничего на свете лучше нету</span><span class="song-arrow">→</span></a></li>
+    <li data-q="бумбокс вахтерам"><a href="songs/bumboks-vakhteram.html"><span class="song-artist">Бумбокс</span><span class="song-title">Вахтерам</span><span class="song-arrow">→</span></a></li>
+    <li data-q="варум городок (ах как хочется вернуться)"><a href="songs/varum-gorodok-akh-kak-khochetsya-vernutsya.html"><span class="song-artist">Варум</span><span class="song-title">Городок (ах как хочется вернуться)</span><span class="song-arrow">→</span></a></li>
+    <li data-q="виа верасы малиновка"><a href="songs/via-verasy-malinovka.html"><span class="song-artist">ВИА Верасы</span><span class="song-title">Малиновка</span><span class="song-arrow">→</span></a></li>
+    <li data-q="виа веселые ребята люди встречаются"><a href="songs/via-veselye-rebyata-lyudi-vstrechayutsya.html"><span class="song-artist">ВИА Веселые ребята</span><span class="song-title">Люди встречаются</span><span class="song-arrow">→</span></a></li>
+    <li data-q="виа веселые ребята розовые розы"><a href="songs/via-veselye-rebyata-rozovye-rozy.html"><span class="song-artist">ВИА Веселые ребята</span><span class="song-title">Розовые розы</span><span class="song-arrow">→</span></a></li>
+    <li data-q="виа пламя (шаинский) идёт солдат по городу"><a href="songs/via-plamya-shainskiy-idyot-soldat-po-gorodu.html"><span class="song-artist">ВИА Пламя (Шаинский)</span><span class="song-title">Идёт солдат по городу</span><span class="song-arrow">→</span></a></li>
+    <li data-q="виа пламя на дальней станции сойду"><a href="songs/via-plamya-na-dalney-stantsii-soydu.html"><span class="song-artist">ВИА Пламя</span><span class="song-title">На дальней станции сойду</span><span class="song-arrow">→</span></a></li>
+    <li data-q="виа пламя снег кружится"><a href="songs/via-plamya-sneg-kruzhitsya.html"><span class="song-artist">ВИА Пламя</span><span class="song-title">Снег кружится</span><span class="song-arrow">→</span></a></li>
+    <li data-q="город 312 213 дорог"><a href="songs/gorod-312-213-dorog.html"><span class="song-artist">Город 312</span><span class="song-title">213 дорог</span><span class="song-arrow">→</span></a></li>
+    <li data-q="город 312 вне зоны доступа"><a href="songs/gorod-312-vne-zony-dostupa.html"><span class="song-artist">Город 312</span><span class="song-title">Вне зоны доступа</span><span class="song-arrow">→</span></a></li>
+    <li data-q="город 312 девочка которая хотела счастья"><a href="songs/gorod-312-devochka-kotoraya-khotela-schastya.html"><span class="song-artist">Город 312</span><span class="song-title">Девочка которая хотела счастья</span><span class="song-arrow">→</span></a></li>
+    <li data-q="город 312 обернись"><a href="songs/gorod-312-obernis.html"><span class="song-artist">Город 312</span><span class="song-title">Обернись</span><span class="song-arrow">→</span></a></li>
+    <li data-q="город 312 останусь"><a href="songs/gorod-312-ostanus.html"><span class="song-artist">Город 312</span><span class="song-title">Останусь</span><span class="song-arrow">→</span></a></li>
+    <li data-q="город 312 фонари"><a href="songs/gorod-312-fonari.html"><span class="song-artist">Город 312</span><span class="song-title">Фонари</span><span class="song-arrow">→</span></a></li>
+    <li data-q="градский как молоды мы были"><a href="songs/gradskiy-kak-molody-my-byli.html"><span class="song-artist">Градский</span><span class="song-title">Как молоды мы были</span><span class="song-arrow">→</span></a></li>
+    <li data-q="градский песня моряка"><a href="songs/gradskiy-pesnya-moryaka.html"><span class="song-artist">Градский</span><span class="song-title">Песня моряка</span><span class="song-arrow">→</span></a></li>
+    <li data-q="градский песня о друге"><a href="songs/gradskiy-pesnya-o-druge.html"><span class="song-artist">Градский</span><span class="song-title">Песня о друге</span><span class="song-arrow">→</span></a></li>
+    <li data-q="градский рыба пила"><a href="songs/gradskiy-ryba-pila.html"><span class="song-artist">Градский</span><span class="song-title">Рыба пила</span><span class="song-arrow">→</span></a></li>
+    <li data-q="губин зима-холода"><a href="songs/gubin-zima-kholoda.html"><span class="song-artist">Губин</span><span class="song-title">Зима-холода</span><span class="song-arrow">→</span></a></li>
+    <li data-q="губин ночь"><a href="songs/gubin-noch.html"><span class="song-artist">Губин</span><span class="song-title">Ночь</span><span class="song-arrow">→</span></a></li>
+    <li data-q=" губит людей не пиво"><a href="songs/gubit-lyudey-ne-pivo.html"><span class="song-artist" style="opacity:0">—</span><span class="song-title">Губит людей не пиво</span><span class="song-arrow">→</span></a></li>
+    <li data-q="джарахов я в моменте"><a href="songs/dzharakhov-ya-v-momente.html"><span class="song-artist">Джарахов</span><span class="song-title">Я В Моменте</span><span class="song-arrow">→</span></a></li>
+    <li data-q="дунаевский ветер перемен"><a href="songs/dunaevskiy-veter-peremen.html"><span class="song-artist">Дунаевский</span><span class="song-title">Ветер перемен</span><span class="song-arrow">→</span></a></li>
+    <li data-q="евдокимов фантазёр"><a href="songs/evdokimov-fantazyor.html"><span class="song-artist">Евдокимов</span><span class="song-title">Фантазёр</span><span class="song-arrow">→</span></a></li>
+    <li data-q="егор крид моя невеста"><a href="songs/egor-krid-moya-nevesta.html"><span class="song-artist">Егор Крид</span><span class="song-title">Моя невеста</span><span class="song-arrow">→</span></a></li>
+    <li data-q="егор крид самая-самая"><a href="songs/egor-krid-samaya-samaya.html"><span class="song-artist">Егор Крид</span><span class="song-title">Самая-самая</span><span class="song-arrow">→</span></a></li>
+    <li data-q="женя белоусов девчонка-девчоночка"><a href="songs/zhenya-belousov-devchonka-devchonochka.html"><span class="song-artist">Женя Белоусов</span><span class="song-title">Девчонка-девчоночка</span><span class="song-arrow">→</span></a></li>
+    <li data-q="женя трофимов поезда"><a href="songs/zhenya-trofimov-poezda.html"><span class="song-artist">Женя Трофимов</span><span class="song-title">Поезда</span><span class="song-arrow">→</span></a></li>
+    <li data-q="жуки батарейка"><a href="songs/zhuki-batareyka.html"><span class="song-artist">Жуки</span><span class="song-title">Батарейка</span><span class="song-arrow">→</span></a></li>
+    <li data-q="зацепин куда уходит детство?"><a href="songs/zatsepin-kuda-ukhodit-detstvo.html"><span class="song-artist">Зацепин</span><span class="song-title">Куда уходит детство?</span><span class="song-arrow">→</span></a></li>
+    <li data-q="звери районы кварталы"><a href="songs/zveri-rayony-kvartaly.html"><span class="song-artist">Звери</span><span class="song-title">Районы Кварталы</span><span class="song-arrow">→</span></a></li>
+    <li data-q="звери до скорой встречи"><a href="songs/zveri-do-skoroy-vstrechi.html"><span class="song-artist">Звери</span><span class="song-title">До скорой встречи</span><span class="song-arrow">→</span></a></li>
+    <li data-q="земляне трава у дома"><a href="songs/zemlyane-trava-u-doma.html"><span class="song-artist">Земляне</span><span class="song-title">Трава у дома</span><span class="song-arrow">→</span></a></li>
+    <li data-q="иванушки и только дождь стучит"><a href="songs/ivanushki-i-tolko-dozhd-stuchit.html"><span class="song-artist">Иванушки</span><span class="song-title">И только дождь стучит</span><span class="song-arrow">→</span></a></li>
+    <li data-q="иванушки тополиный пух"><a href="songs/ivanushki-topolinyy-pukh.html"><span class="song-artist">Иванушки</span><span class="song-title">Тополиный пух</span><span class="song-arrow">→</span></a></li>
+    <li data-q="кадышева плывёт веночек"><a href="songs/kadysheva-plyvyot-venochek.html"><span class="song-artist">Кадышева</span><span class="song-title">Плывёт веночек</span><span class="song-arrow">→</span></a></li>
+    <li data-q="кадышева течет ручей"><a href="songs/kadysheva-techet-ruchey.html"><span class="song-artist">Кадышева</span><span class="song-title">Течет ручей</span><span class="song-arrow">→</span></a></li>
+    <li data-q="кадышева широка река"><a href="songs/kadysheva-shiroka-reka.html"><span class="song-artist">Кадышева</span><span class="song-title">Широка река</span><span class="song-arrow">→</span></a></li>
+    <li data-q="камбурова маленький принц"><a href="songs/kamburova-malenkiy-prints.html"><span class="song-artist">Камбурова</span><span class="song-title">Маленький принц</span><span class="song-arrow">→</span></a></li>
+    <li data-q="кино видели ночь"><a href="songs/kino-videli-noch.html"><span class="song-artist">Кино</span><span class="song-title">Видели ночь</span><span class="song-arrow">→</span></a></li>
+    <li data-q="кино восьмиклассница"><a href="songs/kino-vosmiklassnitsa.html"><span class="song-artist">Кино</span><span class="song-title">Восьмиклассница</span><span class="song-arrow">→</span></a></li>
+    <li data-q="кино группа крови"><a href="songs/kino-gruppa-krovi.html"><span class="song-artist">Кино</span><span class="song-title">Группа крови</span><span class="song-arrow">→</span></a></li>
+    <li data-q="кино звезда по имени солнце"><a href="songs/kino-zvezda-po-imeni-solntse.html"><span class="song-artist">Кино</span><span class="song-title">Звезда по имени солнце</span><span class="song-arrow">→</span></a></li>
+    <li data-q="кино кукушка"><a href="songs/kino-kukushka.html"><span class="song-artist">Кино</span><span class="song-title">Кукушка</span><span class="song-arrow">→</span></a></li>
+    <li data-q="кино пачка сигарет"><a href="songs/kino-pachka-sigaret.html"><span class="song-artist">Кино</span><span class="song-title">Пачка сигарет</span><span class="song-arrow">→</span></a></li>
+    <li data-q="кинопесни александра"><a href="songs/kinopesni-aleksandra.html"><span class="song-artist">Кинопесни</span><span class="song-title">Александра</span><span class="song-arrow">→</span></a></li>
+    <li data-q="кинопесни есть только миг"><a href="songs/kinopesni-est-tolko-mig.html"><span class="song-artist">Кинопесни</span><span class="song-title">Есть только миг</span><span class="song-arrow">→</span></a></li>
+    <li data-q="кинопесни звенит январская вьюга"><a href="songs/kinopesni-zvenit-yanvarskaya-vyuga.html"><span class="song-artist">Кинопесни</span><span class="song-title">Звенит январская вьюга</span><span class="song-arrow">→</span></a></li>
+    <li data-q="кинопесни кабы не было зимы"><a href="songs/kinopesni-kaby-ne-bylo-zimy.html"><span class="song-artist">Кинопесни</span><span class="song-title">Кабы не было зимы</span><span class="song-arrow">→</span></a></li>
+    <li data-q="кинопесни песенка о медведях (где-то на белом свете)"><a href="songs/kinopesni-pesenka-o-medvedyakh-gde-to-na-belom-svete.html"><span class="song-artist">Кинопесни</span><span class="song-title">Песенка о медведях (где-то на белом свете)</span><span class="song-arrow">→</span></a></li>
+    <li data-q="кинопесни песенка про зайцев"><a href="songs/kinopesni-pesenka-pro-zaytsev.html"><span class="song-artist">Кинопесни</span><span class="song-title">Песенка про зайцев</span><span class="song-arrow">→</span></a></li>
+    <li data-q="кинопесни постой, паровоз"><a href="songs/kinopesni-postoy-parovoz.html"><span class="song-artist">Кинопесни</span><span class="song-title">Постой, паровоз</span><span class="song-arrow">→</span></a></li>
+    <li data-q="кинопесни снежинка"><a href="songs/kinopesni-snezhinka.html"><span class="song-artist">Кинопесни</span><span class="song-title">Снежинка</span><span class="song-arrow">→</span></a></li>
+    <li data-q="кинопесни три белых коня"><a href="songs/kinopesni-tri-belykh-konya.html"><span class="song-artist">Кинопесни</span><span class="song-title">Три белых коня</span><span class="song-arrow">→</span></a></li>
+    <li data-q="кинопесни ты мне веришь?"><a href="songs/kinopesni-ty-mne-verish.html"><span class="song-artist">Кинопесни</span><span class="song-title">Ты мне веришь?</span><span class="song-arrow">→</span></a></li>
+    <li data-q="кинопесни я иду шагаю по москве"><a href="songs/kinopesni-ya-idu-shagayu-po-moskve.html"><span class="song-artist">Кинопесни</span><span class="song-title">Я иду шагаю по Москве</span><span class="song-arrow">→</span></a></li>
+    <li data-q="кипелов я свободен"><a href="songs/kipelov-ya-svoboden.html"><span class="song-artist">Кипелов</span><span class="song-title">Я свободен</span><span class="song-arrow">→</span></a></li>
+    <li data-q="киркоров снег"><a href="songs/kirkorov-sneg.html"><span class="song-artist">Киркоров</span><span class="song-title">Снег</span><span class="song-arrow">→</span></a></li>
+    <li data-q="киркоров цвет настроения синий"><a href="songs/kirkorov-tsvet-nastroeniya-siniy.html"><span class="song-artist">Киркоров</span><span class="song-title">Цвет настроения синий</span><span class="song-arrow">→</span></a></li>
+    <li data-q="киркоров я эту жизнь тебе отдам"><a href="songs/kirkorov-ya-etu-zhizn-tebe-otdam.html"><span class="song-artist">Киркоров</span><span class="song-title">Я эту жизнь тебе отдам</span><span class="song-arrow">→</span></a></li>
+    <li data-q="комбинация бухгалтер"><a href="songs/kombinatsiya-bukhgalter.html"><span class="song-artist">Комбинация</span><span class="song-title">Бухгалтер</span><span class="song-arrow">→</span></a></li>
+    <li data-q="комбинация два кусочка колбаски"><a href="songs/kombinatsiya-dva-kusochka-kolbaski.html"><span class="song-artist">Комбинация</span><span class="song-title">Два кусочка колбаски</span><span class="song-arrow">→</span></a></li>
+    <li data-q="корнелюк город которого нет"><a href="songs/kornelyuk-gorod-kotorogo-net.html"><span class="song-artist">Корнелюк</span><span class="song-title">Город которого нет</span><span class="song-arrow">→</span></a></li>
+    <li data-q="корнелюк дожди"><a href="songs/kornelyuk-dozhdi.html"><span class="song-artist">Корнелюк</span><span class="song-title">Дожди</span><span class="song-arrow">→</span></a></li>
+    <li data-q="король и шут лесник"><a href="songs/korol-i-shut-lesnik.html"><span class="song-artist">Король и Шут</span><span class="song-title">Лесник</span><span class="song-arrow">→</span></a></li>
+    <li data-q="король и шут ром"><a href="songs/korol-i-shut-rom.html"><span class="song-artist">Король и Шут</span><span class="song-title">Ром</span><span class="song-arrow">→</span></a></li>
+    <li data-q="король и шут ели мясо мужики"><a href="songs/korol-i-shut-eli-myaso-muzhiki.html"><span class="song-artist">Король и Шут</span><span class="song-title">Ели мясо мужики</span><span class="song-arrow">→</span></a></li>
+    <li data-q="король и шут кукла колдуна"><a href="songs/korol-i-shut-kukla-kolduna.html"><span class="song-artist">Король и Шут</span><span class="song-title">Кукла колдуна</span><span class="song-arrow">→</span></a></li>
+    <li data-q="король и шут прыгну со скалы"><a href="songs/korol-i-shut-prygnu-so-skaly.html"><span class="song-artist">Король и Шут</span><span class="song-title">Прыгну со скалы</span><span class="song-arrow">→</span></a></li>
+    <li data-q="крис кельми замыкая круг"><a href="songs/kris-kelmi-zamykaya-krug.html"><span class="song-artist">Крис Кельми</span><span class="song-title">Замыкая круг</span><span class="song-arrow">→</span></a></li>
+    <li data-q="крылатов крылатые качели"><a href="songs/krylatov-krylatye-kacheli.html"><span class="song-artist">Крылатов</span><span class="song-title">Крылатые качели</span><span class="song-arrow">→</span></a></li>
+    <li data-q="крылатов прекрасное далеко"><a href="songs/krylatov-prekrasnoe-daleko.html"><span class="song-artist">Крылатов</span><span class="song-title">Прекрасное далеко</span><span class="song-arrow">→</span></a></li>
+    <li data-q="ласковый май розовый вечер"><a href="songs/laskovyy-may-rozovyy-vecher.html"><span class="song-artist">Ласковый май</span><span class="song-title">Розовый вечер</span><span class="song-arrow">→</span></a></li>
+    <li data-q="ласковый май седая ночь"><a href="songs/laskovyy-may-sedaya-noch.html"><span class="song-artist">Ласковый май</span><span class="song-title">Седая ночь</span><span class="song-arrow">→</span></a></li>
+    <li data-q="ласковый май белые розы"><a href="songs/laskovyy-may-belye-rozy.html"><span class="song-artist">Ласковый май</span><span class="song-title">Белые розы</span><span class="song-arrow">→</span></a></li>
+    <li data-q="ленинград www ленинград"><a href="songs/leningrad-www-leningrad.html"><span class="song-artist">Ленинград</span><span class="song-title">WWW Ленинград</span><span class="song-arrow">→</span></a></li>
+    <li data-q="ленинград вояж"><a href="songs/leningrad-voyazh.html"><span class="song-artist">Ленинград</span><span class="song-title">Вояж</span><span class="song-arrow">→</span></a></li>
+    <li data-q="ленинград экспонат"><a href="songs/leningrad-eksponat.html"><span class="song-artist">Ленинград</span><span class="song-title">Экспонат</span><span class="song-arrow">→</span></a></li>
+    <li data-q="леонтьев дельтаплан"><a href="songs/leontev-deltaplan.html"><span class="song-artist">Леонтьев</span><span class="song-title">Дельтаплан</span><span class="song-arrow">→</span></a></li>
+    <li data-q="лепс натали"><a href="songs/leps-natali.html"><span class="song-artist">Лепс</span><span class="song-title">Натали</span><span class="song-arrow">→</span></a></li>
+    <li data-q="лепс я поднимаю руки"><a href="songs/leps-ya-podnimayu-ruki.html"><span class="song-artist">Лепс</span><span class="song-title">Я поднимаю руки</span><span class="song-arrow">→</span></a></li>
+    <li data-q="лепс зеркала"><a href="songs/leps-zerkala.html"><span class="song-artist">Лепс</span><span class="song-title">Зеркала</span><span class="song-arrow">→</span></a></li>
+    <li data-q="лепс обернитесь"><a href="songs/leps-obernites.html"><span class="song-artist">Лепс</span><span class="song-title">Обернитесь</span><span class="song-arrow">→</span></a></li>
+    <li data-q="лепс рюмка водки на столе"><a href="songs/leps-ryumka-vodki-na-stole.html"><span class="song-artist">Лепс</span><span class="song-title">Рюмка водки на столе</span><span class="song-arrow">→</span></a></li>
+    <li data-q="лепс самый лучший день"><a href="songs/leps-samyy-luchshiy-den.html"><span class="song-artist">Лепс</span><span class="song-title">Самый лучший день</span><span class="song-arrow">→</span></a></li>
+    <li data-q="лепс я счастливый"><a href="songs/leps-ya-schastlivyy.html"><span class="song-artist">Лепс</span><span class="song-title">Я счастливый</span><span class="song-arrow">→</span></a></li>
+    <li data-q="любэ а река течет"><a href="songs/lyube-a-reka-techet.html"><span class="song-artist">Любэ</span><span class="song-title">А река течет</span><span class="song-arrow">→</span></a></li>
+    <li data-q="любэ берёзы"><a href="songs/lyube-beryozy.html"><span class="song-artist">Любэ</span><span class="song-title">Берёзы</span><span class="song-arrow">→</span></a></li>
+    <li data-q="любэ комбат"><a href="songs/lyube-kombat.html"><span class="song-artist">Любэ</span><span class="song-title">Комбат</span><span class="song-arrow">→</span></a></li>
+    <li data-q="любэ позови меня тихо по имени"><a href="songs/lyube-pozovi-menya-tikho-po-imeni.html"><span class="song-artist">Любэ</span><span class="song-title">Позови меня тихо по имени</span><span class="song-arrow">→</span></a></li>
+    <li data-q="любэ ребята с нашего двора"><a href="songs/lyube-rebyata-s-nashego-dvora.html"><span class="song-artist">Любэ</span><span class="song-title">Ребята с нашего двора</span><span class="song-arrow">→</span></a></li>
+    <li data-q="любэ там, за туманами"><a href="songs/lyube-tam-za-tumanami.html"><span class="song-artist">Любэ</span><span class="song-title">Там, за туманами</span><span class="song-arrow">→</span></a></li>
+    <li data-q="любэ конь"><a href="songs/lyube-kon.html"><span class="song-artist">Любэ</span><span class="song-title">Конь</span><span class="song-arrow">→</span></a></li>
+    <li data-q="магомаев bella, ciao"><a href="songs/magomaev-bella-ciao.html"><span class="song-artist">Магомаев</span><span class="song-title">Bella, ciao</span><span class="song-arrow">→</span></a></li>
+    <li data-q="магомаев королева красоты"><a href="songs/magomaev-koroleva-krasoty.html"><span class="song-artist">Магомаев</span><span class="song-title">Королева красоты</span><span class="song-arrow">→</span></a></li>
+    <li data-q="магомаев лучший город земли"><a href="songs/magomaev-luchshiy-gorod-zemli.html"><span class="song-artist">Магомаев</span><span class="song-title">Лучший город земли</span><span class="song-arrow">→</span></a></li>
+    <li data-q="магомаев песня о далекой родине"><a href="songs/magomaev-pesnya-o-dalekoy-rodine.html"><span class="song-artist">Магомаев</span><span class="song-title">Песня о далекой родине</span><span class="song-arrow">→</span></a></li>
+    <li data-q="магомаев свадьба"><a href="songs/magomaev-svadba.html"><span class="song-artist">Магомаев</span><span class="song-title">Свадьба</span><span class="song-arrow">→</span></a></li>
+    <li data-q="магомаев синяя вечность"><a href="songs/magomaev-sinyaya-vechnost.html"><span class="song-artist">Магомаев</span><span class="song-title">Синяя вечность</span><span class="song-arrow">→</span></a></li>
+    <li data-q="магомаев чертово колесо"><a href="songs/magomaev-chertovo-koleso.html"><span class="song-artist">Магомаев</span><span class="song-title">Чертово колесо</span><span class="song-arrow">→</span></a></li>
+    <li data-q="макsim знаешь ли ты"><a href="songs/maksim-znaesh-li-ty.html"><span class="song-artist">МакSim</span><span class="song-title">Знаешь ли ты</span><span class="song-arrow">→</span></a></li>
+    <li data-q="макс корж жить в кайф"><a href="songs/maks-korzh-zhit-v-kayf.html"><span class="song-artist">Макс Корж</span><span class="song-title">Жить в кайф</span><span class="song-arrow">→</span></a></li>
+    <li data-q="матушка (матушка земля)"><a href="songs/matushka-matushka-zemlya.html"><span class="song-artist">Матушка (Матушка</span><span class="song-title">земля)</span><span class="song-arrow">→</span></a></li>
+    <li data-q="машина времени мой друг"><a href="songs/mashina-vremeni-moy-drug.html"><span class="song-artist">Машина времени</span><span class="song-title">Мой друг</span><span class="song-arrow">→</span></a></li>
+    <li data-q="машина времени поворот"><a href="songs/mashina-vremeni-povorot.html"><span class="song-artist">Машина времени</span><span class="song-title">Поворот</span><span class="song-arrow">→</span></a></li>
+    <li data-q="меладзе вера"><a href="songs/meladze-vera.html"><span class="song-artist">Меладзе</span><span class="song-title">Вера</span><span class="song-arrow">→</span></a></li>
+    <li data-q="меладзе небеса"><a href="songs/meladze-nebesa.html"><span class="song-artist">Меладзе</span><span class="song-title">Небеса</span><span class="song-arrow">→</span></a></li>
+    <li data-q="меладзе красиво"><a href="songs/meladze-krasivo.html"><span class="song-artist">Меладзе</span><span class="song-title">Красиво</span><span class="song-arrow">→</span></a></li>
+    <li data-q="меладзе самба белого мотылька"><a href="songs/meladze-samba-belogo-motylka.html"><span class="song-artist">Меладзе</span><span class="song-title">Самба белого мотылька</span><span class="song-arrow">→</span></a></li>
+    <li data-q="мираж музыка нас связала"><a href="songs/mirazh-muzyka-nas-svyazala.html"><span class="song-artist">Мираж</span><span class="song-title">Музыка нас связала</span><span class="song-arrow">→</span></a></li>
+    <li data-q="народная ой, то не вечер"><a href="songs/narodnaya-oy-to-ne-vecher.html"><span class="song-artist">Народная</span><span class="song-title">Ой, то не вечер</span><span class="song-arrow">→</span></a></li>
+    <li data-q="народная черный ворон"><a href="songs/narodnaya-chernyy-voron.html"><span class="song-artist">Народная</span><span class="song-title">Черный ворон</span><span class="song-arrow">→</span></a></li>
+    <li data-q="натали ветер с моря дул"><a href="songs/natali-veter-s-morya-dul.html"><span class="song-artist">Натали</span><span class="song-title">Ветер с моря дул</span><span class="song-arrow">→</span></a></li>
+    <li data-q="никольский музыкант"><a href="songs/nikolskiy-muzykant.html"><span class="song-artist">Никольский</span><span class="song-title">Музыкант</span><span class="song-arrow">→</span></a></li>
+    <li data-q="носков это здорово"><a href="songs/noskov-eto-zdorovo.html"><span class="song-artist">Носков</span><span class="song-title">Это здорово</span><span class="song-arrow">→</span></a></li>
+    <li data-q="отпетые мошенники люби меня люби"><a href="songs/otpetye-moshenniki-lyubi-menya-lyubi.html"><span class="song-artist">Отпетые мошенники</span><span class="song-title">Люби меня люби</span><span class="song-arrow">→</span></a></li>
+    <li data-q="пахмутова до свиданья, москва"><a href="songs/pakhmutova-do-svidanya-moskva.html"><span class="song-artist">Пахмутова</span><span class="song-title">До свиданья, Москва</span><span class="song-arrow">→</span></a></li>
+    <li data-q="песни военных лет вечер на рейде"><a href="songs/pesni-voennykh-let-vecher-na-reyde.html"><span class="song-artist">Песни военных лет</span><span class="song-title">Вечер на рейде</span><span class="song-arrow">→</span></a></li>
+    <li data-q="песни военных лет казаки (в берлине)"><a href="songs/pesni-voennykh-let-kazaki-v-berline.html"><span class="song-artist">Песни военных лет</span><span class="song-title">Казаки (в Берлине)</span><span class="song-arrow">→</span></a></li>
+    <li data-q="песни военных лет катюша"><a href="songs/pesni-voennykh-let-katyusha.html"><span class="song-artist">Песни военных лет</span><span class="song-title">Катюша</span><span class="song-arrow">→</span></a></li>
+    <li data-q="песни военных лет на поле танки грохотали"><a href="songs/pesni-voennykh-let-na-pole-tanki-grokhotali.html"><span class="song-artist">Песни военных лет</span><span class="song-title">На поле танки грохотали</span><span class="song-arrow">→</span></a></li>
+    <li data-q="песни военных лет синий платочек"><a href="songs/pesni-voennykh-let-siniy-platochek.html"><span class="song-artist">Песни военных лет</span><span class="song-title">Синий платочек</span><span class="song-arrow">→</span></a></li>
+    <li data-q="песни военных лет случайный вальс"><a href="songs/pesni-voennykh-let-sluchaynyy-vals.html"><span class="song-artist">Песни военных лет</span><span class="song-title">Случайный вальс</span><span class="song-arrow">→</span></a></li>
+    <li data-q="песни военных лет смуглянка"><a href="songs/pesni-voennykh-let-smuglyanka.html"><span class="song-artist">Песни военных лет</span><span class="song-title">Смуглянка</span><span class="song-arrow">→</span></a></li>
+    <li data-q="песняры беловежская пуща"><a href="songs/pesnyary-belovezhskaya-puscha.html"><span class="song-artist">Песняры</span><span class="song-title">Беловежская пуща</span><span class="song-arrow">→</span></a></li>
+    <li data-q="песняры вологда"><a href="songs/pesnyary-vologda.html"><span class="song-artist">Песняры</span><span class="song-title">Вологда</span><span class="song-arrow">→</span></a></li>
+    <li data-q="порнофильмы я так соскучился"><a href="songs/pornofilmy-ya-tak-soskuchilsya.html"><span class="song-artist">Порнофильмы</span><span class="song-title">Я так соскучился</span><span class="song-arrow">→</span></a></li>
+    <li data-q="пресняков зурбаган"><a href="songs/presnyakov-zurbagan.html"><span class="song-artist">Пресняков</span><span class="song-title">Зурбаган</span><span class="song-arrow">→</span></a></li>
+    <li data-q=" рекорд оркестр- лада седан"><a href="songs/rekord-orkestr-lada-sedan.html"><span class="song-artist" style="opacity:0">—</span><span class="song-title">Рекорд Оркестр- Лада Седан</span><span class="song-arrow">→</span></a></li>
+    <li data-q="руки вверх восемнадцать мне уже"><a href="songs/ruki-vverkh-vosemnadtsat-mne-uzhe.html"><span class="song-artist">Руки Вверх</span><span class="song-title">Восемнадцать мне уже</span><span class="song-arrow">→</span></a></li>
+    <li data-q="руки вверх крошка моя"><a href="songs/ruki-vverkh-kroshka-moya.html"><span class="song-artist">Руки Вверх</span><span class="song-title">крошка моя</span><span class="song-arrow">→</span></a></li>
+    <li data-q="самоцветы всё что в жизни есть у меня"><a href="songs/samotsvety-vsyo-chto-v-zhizni-est-u-menya.html"><span class="song-artist">Самоцветы</span><span class="song-title">Всё что в жизни есть у меня</span><span class="song-arrow">→</span></a></li>
+    <li data-q="самоцветы кто тебе сказал"><a href="songs/samotsvety-kto-tebe-skazal.html"><span class="song-artist">Самоцветы</span><span class="song-title">Кто тебе сказал</span><span class="song-arrow">→</span></a></li>
+    <li data-q="самоцветы мой адрес советский союз"><a href="songs/samotsvety-moy-adres-sovetskiy-soyuz.html"><span class="song-artist">Самоцветы</span><span class="song-title">Мой адрес Советский Союз</span><span class="song-arrow">→</span></a></li>
+    <li data-q="самоцветы не надо печалиться"><a href="songs/samotsvety-ne-nado-pechalitsya.html"><span class="song-artist">Самоцветы</span><span class="song-title">Не надо печалиться</span><span class="song-arrow">→</span></a></li>
+    <li data-q="самоцветы обручальное кольцо"><a href="songs/samotsvety-obruchalnoe-koltso.html"><span class="song-artist">Самоцветы</span><span class="song-title">Обручальное кольцо</span><span class="song-arrow">→</span></a></li>
+    <li data-q="самоцветы синий иней"><a href="songs/samotsvety-siniy-iney.html"><span class="song-artist">Самоцветы</span><span class="song-title">Синий иней</span><span class="song-arrow">→</span></a></li>
+    <li data-q="саруханов дорогие мои старики"><a href="songs/sarukhanov-dorogie-moi-stariki.html"><span class="song-artist">Саруханов</span><span class="song-title">Дорогие мои старики</span><span class="song-arrow">→</span></a></li>
+    <li data-q="саруханов желаю тебе"><a href="songs/sarukhanov-zhelayu-tebe.html"><span class="song-artist">Саруханов</span><span class="song-title">Желаю тебе</span><span class="song-arrow">→</span></a></li>
+    <li data-q="саруханов позади крутой поворот"><a href="songs/sarukhanov-pozadi-krutoy-povorot.html"><span class="song-artist">Саруханов</span><span class="song-title">Позади крутой поворот</span><span class="song-arrow">→</span></a></li>
+    <li data-q="саруханов скрип колеса"><a href="songs/sarukhanov-skrip-kolesa.html"><span class="song-artist">Саруханов</span><span class="song-title">Скрип колеса</span><span class="song-arrow">→</span></a></li>
+    <li data-q="секрет моя любовь на 5 этаже"><a href="songs/sekret-moya-lyubov-na-5-etazhe.html"><span class="song-artist">Секрет</span><span class="song-title">Моя любовь на 5 этаже</span><span class="song-arrow">→</span></a></li>
+    <li data-q="серов я люблю тебя до слёз"><a href="songs/serov-ya-lyublyu-tebya-do-slyoz.html"><span class="song-artist">Серов</span><span class="song-title">Я люблю тебя до слёз</span><span class="song-arrow">→</span></a></li>
+    <li data-q="синяя птица там где клён шумит"><a href="songs/sinyaya-ptitsa-tam-gde-klyon-shumit.html"><span class="song-artist">Синяя птица</span><span class="song-title">Там где клён шумит</span><span class="song-arrow">→</span></a></li>
+    <li data-q="скляр комарово"><a href="songs/sklyar-komarovo.html"><span class="song-artist">Скляр</span><span class="song-title">Комарово</span><span class="song-arrow">→</span></a></li>
+    <li data-q="смешарики от винта (смешband)"><a href="songs/smeshariki-ot-vinta-smeshband.html"><span class="song-artist">Смешарики</span><span class="song-title">От Винта (СмешBand)</span><span class="song-arrow">→</span></a></li>
+    <li data-q="смысловые галлюцинации вечно молодой"><a href="songs/smyslovye-gallyutsinatsii-vechno-molodoy.html"><span class="song-artist">Смысловые галлюцинации</span><span class="song-title">Вечно молодой</span><span class="song-arrow">→</span></a></li>
+    <li data-q="соловьев-седой первым делом самолёты"><a href="songs/solovev-sedoy-pervym-delom-samolyoty.html"><span class="song-artist">Соловьев-Седой</span><span class="song-title">Первым делом самолёты</span><span class="song-arrow">→</span></a></li>
+    <li data-q="соловьев-седой подмосковные вечера"><a href="songs/solovev-sedoy-podmoskovnye-vechera.html"><span class="song-artist">Соловьев-Седой</span><span class="song-title">Подмосковные вечера</span><span class="song-arrow">→</span></a></li>
+    <li data-q="софия рорару луна луна"><a href="songs/sofiya-roraru-luna-luna.html"><span class="song-artist">София Рорару</span><span class="song-title">Луна Луна</span><span class="song-arrow">→</span></a></li>
+    <li data-q="тальков чистые пруды"><a href="songs/talkov-chistye-prudy.html"><span class="song-artist">Тальков</span><span class="song-title">Чистые пруды</span><span class="song-arrow">→</span></a></li>
+    <li data-q="танцы минус половинка"><a href="songs/tantsy-minus-polovinka.html"><span class="song-artist">Танцы минус</span><span class="song-title">Половинка</span><span class="song-arrow">→</span></a></li>
+    <li data-q="танцы минус город"><a href="songs/tantsy-minus-gorod.html"><span class="song-artist">Танцы минус</span><span class="song-title">Город</span><span class="song-arrow">→</span></a></li>
+    <li data-q=" течёт река волга"><a href="songs/techyot-reka-volga.html"><span class="song-artist" style="opacity:0">—</span><span class="song-title">Течёт река Волга</span><span class="song-arrow">→</span></a></li>
+    <li data-q="толкунова песенка без конца"><a href="songs/tolkunova-pesenka-bez-kontsa.html"><span class="song-artist">Толкунова</span><span class="song-title">Песенка без конца</span><span class="song-arrow">→</span></a></li>
+    <li data-q="улыбайся iowa"><a href="songs/ulybaysya-iowa.html"><span class="song-artist">Улыбайся</span><span class="song-title">IOWA</span><span class="song-arrow">→</span></a></li>
+    <li data-q="хренников московские окна"><a href="songs/khrennikov-moskovskie-okna.html"><span class="song-artist">Хренников</span><span class="song-title">Московские окна</span><span class="song-arrow">→</span></a></li>
+    <li data-q="цветы мы желаем счастья вам"><a href="songs/tsvety-my-zhelaem-schastya-vam.html"><span class="song-artist">Цветы</span><span class="song-title">Мы желаем счастья вам</span><span class="song-arrow">→</span></a></li>
+    <li data-q="чиж&co. о любви"><a href="songs/chizhco-o-lyubvi.html"><span class="song-artist">Чиж&co.</span><span class="song-title">О любви</span><span class="song-arrow">→</span></a></li>
+    <li data-q="шаинский голубой вагон"><a href="songs/shainskiy-goluboy-vagon.html"><span class="song-artist">Шаинский</span><span class="song-title">Голубой вагон</span><span class="song-arrow">→</span></a></li>
+    <li data-q="шаинский крейсер аврора"><a href="songs/shainskiy-kreyser-avrora.html"><span class="song-artist">Шаинский</span><span class="song-title">Крейсер аврора</span><span class="song-arrow">→</span></a></li>
+    <li data-q="шаинский кузнечик"><a href="songs/shainskiy-kuznechik.html"><span class="song-artist">Шаинский</span><span class="song-title">Кузнечик</span><span class="song-arrow">→</span></a></li>
+    <li data-q="шаинский пусть бегут неуклюже"><a href="songs/shainskiy-pust-begut-neuklyuzhe.html"><span class="song-artist">Шаинский</span><span class="song-title">Пусть бегут неуклюже</span><span class="song-arrow">→</span></a></li>
+    <li data-q="шуфутинский 3 сентября"><a href="songs/shufutinskiy-3-sentyabrya.html"><span class="song-artist">Шуфутинский</span><span class="song-title">3 сентября</span><span class="song-arrow">→</span></a></li>
+    <li data-q="юлиан русский вальс"><a href="songs/yulian-russkiy-vals.html"><span class="song-artist">Юлиан</span><span class="song-title">Русский вальс</span><span class="song-arrow">→</span></a></li>
   </ul>
   <p id="empty">Nothing found</p>
 </main>
-<footer>207 songs · GitHub Pages</footer>
+<footer>211 songs · GitHub Pages</footer>
+
 <script>
-const search=document.getElementById('search');
-const items=document.querySelectorAll('#song-list li');
-const empty=document.getElementById('empty');
-const count=document.getElementById('count');
-search.addEventListener('input',()=>{
-  const q=search.value.toLowerCase().trim();
-  let v=0;
-  items.forEach(li=>{const m=!q||li.dataset.q.includes(q);li.classList.toggle('hidden',!m);if(m)v++;});
-  empty.style.display=(!q||v>0)?'none':'block';
-  count.textContent=q?v+'/207':'';
+const search = document.getElementById('search');
+const items  = document.querySelectorAll('#song-list li');
+const empty  = document.getElementById('empty');
+const count  = document.getElementById('count');
+
+search.addEventListener('input', () => {
+  const q = search.value.toLowerCase().trim();
+  let visible = 0;
+  items.forEach(li => {
+    const match = !q || li.dataset.q.includes(q);
+    li.classList.toggle('hidden', !match);
+    if (match) visible++;
+  });
+  empty.style.display = (!q || visible > 0) ? 'none' : 'block';
+  count.textContent   = q ? visible + ' / 211' : '';
 });
-if(window.innerWidth>600)search.focus();
+
+// autofocus only on non-mobile
+if (window.innerWidth > 600) search.focus();
 </script>
 </body>
 </html>
