@@ -37,7 +37,7 @@
 <body>
 <header>
   <div class="logo">Karaoke</div>
-  <p class="subtitle">211 songs</p>
+  <p class="subtitle">212 songs</p>
   <div class="search-wrap">
     <span class="search-icon">♪</span>
     <input id="search" type="search" placeholder="Artist or song title..." autocomplete="off" autocorrect="off" spellcheck="false">
@@ -257,10 +257,12 @@
     <li data-q="жуки батарейка"><a href="songs/zhuki-batareyka.html"><span class="song-artist">Жуки</span><span class="song-title">Батарейка</span><span class="song-arrow">→</span></a></li>
     <li data-q="звери до скорой встречи"><a href="songs/zveri-do-skoroy-vstrechi.html"><span class="song-artist">Звери</span><span class="song-title">До скорой встречи</span><span class="song-arrow">→</span></a></li>
     <li data-q="звери районы кварталы"><a href="songs/zveri-rayony-kvartaly.html"><span class="song-artist">Звери</span><span class="song-title">Районы Кварталы</span><span class="song-arrow">→</span></a></li>
+  
+    <li data-q="дискотека авария, жанна фриске малинки"><a href="songs/diskoteka-avariya-zhanna-friske-malinki.html"><span class="song-artist">Дискотека Авария, Жанна Фриске</span><span class="song-title">Малинки</span><span class="song-arrow">→</span></a></li>
   </ul>
   <p id="empty">Nothing found</p>
 </main>
-<footer>211 songs · GitHub Pages</footer>
+<footer>212 songs · GitHub Pages</footer>
 <script>
 const search=document.getElementById('search');
 const items=document.querySelectorAll('#song-list li');
@@ -271,7 +273,7 @@ search.addEventListener('input',()=>{
   let v=0;
   items.forEach(li=>{const m=!q||li.dataset.q.includes(q);li.classList.toggle('hidden',!m);if(m)v++;});
   empty.style.display=(!q||v>0)?'none':'block';
-  count.textContent=q?v+'/211':'';
+  count.textContent=q?v+'/212':'';
 });
 if(window.innerWidth>600)search.focus();
 </script>
