@@ -7,7 +7,41 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300&display=swap');
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-  :root{--bg:#0f0e0c;--surface:#1a1814;--border:#2e2b26;--gold:#c9a84c;--gold2:#e8c96b;--text:#e8e0d0;--muted:#8a8070;--lyric:#f0e8d8;--nav-bg:rgba(15,14,12,0.92)}
+    :root {
+    --bg:      #0f0e0c;
+    --surface: #1a1814;
+    --border:  #2e2b26;
+    --gold:    #c9a84c;
+    --gold2:   #e8c96b;
+    --text:    #e8e0d0;
+    --muted:   #8a8070;
+    --lyric:   #f0e8d8;
+    --nav-bg:  rgba(15,14,12,0.92);
+  }
+  :root[data-theme="light"] {
+    --bg:      #faf8f4;
+    --surface: #f0ece4;
+    --border:  #d8d0c0;
+    --gold:    #9a6e20;
+    --gold2:   #b8862a;
+    --text:    #2a2318;
+    --muted:   #7a6e5e;
+    --lyric:   #1a1410;
+    --nav-bg:  rgba(250,248,244,0.92);
+  }
+  .theme-btn {
+    margin-left: auto;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    padding: 4px 12px;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .theme-btn:hover { color: var(--gold); border-color: var(--gold); }
   :root[data-theme=light]{--bg:#faf8f4;--surface:#f0ece4;--border:#d8d0c0;--gold:#9a6e20;--gold2:#b8862a;--text:#2a2318;--muted:#7a6e5e;--lyric:#1a1410;--nav-bg:rgba(250,248,244,0.92)}
   html{scroll-behavior:smooth}
   body{background:var(--bg);color:var(--text);font-family:'Source Serif 4',Georgia,serif;font-size:clamp(17px,2.5vw,21px);line-height:1.75;min-height:100vh}

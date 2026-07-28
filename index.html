@@ -7,7 +7,10 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300&display=swap');
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-  :root{--bg:#0f0e0c;--surface:#1a1814;--border:#2e2b26;--gold:#c9a84c;--gold2:#e8c96b;--text:#e8e0d0;--muted:#8a8070}
+  :root{--bg:#0f0e0c;--surface:#1a1814;--border:#2e2b26;--gold:#c9a84c;--gold2:#e8c96b;--text:#e8e0d0;--muted:#8a8070;--nav-bg:rgba(15,14,12,0.92)}
+  :root[data-theme=light]{--bg:#faf8f4;--surface:#f0ece4;--border:#d8d0c0;--gold:#9a6e20;--gold2:#b8862a;--text:#2a2318;--muted:#7a6e5e;--nav-bg:rgba(250,248,244,0.92)}
+  .theme-btn{background:none;border:1px solid var(--border);border-radius:20px;color:var(--muted);font-size:.75rem;letter-spacing:.08em;padding:4px 12px;cursor:pointer;transition:color .2s,border-color .2s}
+  .theme-btn:hover{color:var(--gold);border-color:var(--gold)}
   body{background:var(--bg);color:var(--text);font-family:'Source Serif 4',Georgia,serif;min-height:100vh}
   body::before{content:'';position:fixed;inset:0;z-index:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none}
   header{position:relative;z-index:1;text-align:center;padding:clamp(48px,8vw,100px) 24px clamp(32px,5vw,60px);border-bottom:1px solid var(--border)}
@@ -32,6 +35,29 @@
   .hidden{display:none!important}
   #empty{text-align:center;color:var(--muted);padding:64px 0;font-style:italic;display:none}
   footer{position:relative;z-index:1;text-align:center;padding:24px;color:var(--muted);font-size:.75rem;letter-spacing:.1em;border-top:1px solid var(--border)}
+
+  @media (max-width: 560px) {
+    #song-list a {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      position: relative;
+      padding-right: 32px;
+    }
+    .song-artist {
+      min-width: auto;
+      white-space: normal;
+    }
+    .song-arrow {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    #song-list a:hover .song-arrow {
+      transform: translateY(-50%) translateX(4px);
+    }
+  }
 </style>
 </head>
 <body>
@@ -278,6 +304,26 @@ search.addEventListener('input',()=>{
   count.textContent=q?v+'/213':'';
 });
 if(window.innerWidth>600)search.focus();
+</script>
+
+<script>
+(function(){
+  var r=document.documentElement;
+  var t=localStorage.getItem('theme')||'dark';
+  r.setAttribute('data-theme',t);
+  function update(btn){btn.textContent=t==='dark'?'☀ Светлая':'☾ Тёмная';}
+  document.addEventListener('DOMContentLoaded',function(){
+    var btn=document.querySelector('.theme-btn');
+    if(!btn)return;
+    update(btn);
+    btn.addEventListener('click',function(){
+      t=t==='dark'?'light':'dark';
+      r.setAttribute('data-theme',t);
+      localStorage.setItem('theme',t);
+      update(btn);
+    });
+  });
+})();
 </script>
 </body>
 </html>
