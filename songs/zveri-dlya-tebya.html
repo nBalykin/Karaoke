@@ -40,6 +40,10 @@
     padding: 4px 12px;
     cursor: pointer;
     transition: color 0.2s, border-color 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
   }
   .theme-btn:hover { color: var(--gold); border-color: var(--gold); }
   :root[data-theme=light]{--bg:#faf8f4;--surface:#f0ece4;--border:#d8d0c0;--gold:#9a6e20;--gold2:#b8862a;--text:#2a2318;--muted:#7a6e5e;--lyric:#1a1410;--nav-bg:rgba(250,248,244,0.92)}
@@ -67,7 +71,7 @@
 </head>
 <body>
 <nav>
-  <a href="../index.html">← К списку песен</a>
+  <a href="../index.html" class="back-link"><span class="back-arrow">←</span><span class="back-text">К списку песен</span></a>
   <span>/</span>
   <span style="color:var(--muted);font-size:.85rem">Звери — Для тебя</span>
   <button class="theme-btn" aria-label="Тема">☀ Светлая</button>

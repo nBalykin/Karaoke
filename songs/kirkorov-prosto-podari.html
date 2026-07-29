@@ -16,7 +16,12 @@
   nav a{color:var(--gold);text-decoration:none;font-family:'Playfair Display',serif;font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;opacity:.8;transition:opacity .2s}
   nav a:hover{opacity:1}
   nav span{color:var(--border);font-size:.9rem}
-  .theme-btn{margin-left:auto;background:none;border:1px solid var(--border);border-radius:20px;color:var(--muted);font-size:.75rem;letter-spacing:.08em;padding:4px 12px;cursor:pointer;transition:color .2s,border-color .2s}
+  .theme-btn{margin-left:auto;background:none;border:1px solid var(--border);border-radius:20px;color:var(--muted);font-size:.75rem;letter-spacing:.08em;padding:4px 12px;cursor:pointer;transition:color .2s,border-color .2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
   .theme-btn:hover{color:var(--gold);border-color:var(--gold)}
   main{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:clamp(32px,6vw,80px) clamp(20px,5vw,40px)}
   header{margin-bottom:48px;padding-bottom:32px;border-bottom:1px solid var(--border)}
@@ -33,7 +38,7 @@
 </head>
 <body>
 <nav>
-  <a href="../index.html">← К списку песен</a>
+  <a href="../index.html" class="back-link"><span class="back-arrow">←</span><span class="back-text">К списку песен</span></a>
   <span>/</span>
   <span style="color:var(--muted);font-size:.85rem">Киркоров — Просто подари</span>
   <button class="theme-btn" aria-label="Тема">☀ Светлая</button>
