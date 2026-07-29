@@ -15,12 +15,12 @@
   nav{position:sticky;top:0;z-index:10;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;gap:12px}
   nav a{color:var(--gold);text-decoration:none;font-family:'Playfair Display',serif;font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;opacity:.8;transition:opacity .2s}
   nav a:hover{opacity:1}
-  .theme-btn{margin-left:auto;background:none;border:1px solid var(--border);border-radius:20px;color:var(--muted);font-size:.75rem;letter-spacing:.08em;padding:4px 12px;cursor:pointer;transition:color .2s,border-color .2s;
+  nav a.back-link{display:flex;align-items:center;gap:8px;opacity:1}.back-arrow{width:8px;height:8px;border-top:2px solid currentColor;border-left:2px solid currentColor;transform:rotate(-45deg);flex-shrink:0}.back-text{white-space:nowrap}.theme-btn{height:26px;margin-left:auto;background:none;border:1px solid var(--border);border-radius:20px;color:var(--muted);font-size:.75rem;letter-spacing:.08em;padding:4px 12px;cursor:pointer;transition:color .2s,border-color .2s;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     line-height: 1;
-  }
+  ;gap:5px}.theme-icon{width:12px;text-align:center;flex-shrink:0}
   .theme-btn:hover{color:var(--gold);border-color:var(--gold)}
   main{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:clamp(32px,6vw,80px) clamp(20px,5vw,40px)}
   header{margin-bottom:48px;padding-bottom:32px;border-bottom:1px solid var(--border)}
@@ -42,8 +42,8 @@
 </head>
 <body>
 <nav>
-  <a href="../index.html" class="back-link"><span class="back-arrow">←</span><span class="back-text">Список песен</span></a>
-  <button class="theme-btn" aria-label="Тема">☀ Светлая</button>
+  <a href="../index.html" class="back-link"><span class="back-arrow"></span><span class="back-text">Список песен</span></a>
+  <button class="theme-btn" aria-label="Тема"><span class="theme-icon">☀</span><span class="theme-label">Светлая</span></button>
   <div class="scale-controls"><button class="scale-btn" onclick="changeScale(-1)" aria-label="Уменьшить текст">A−</button><button class="scale-btn" onclick="changeScale(1)" aria-label="Увеличить текст">A+</button></div>
 </nav>
 <main>
@@ -55,7 +55,7 @@
 (function(){
   var r=document.documentElement,t=localStorage.getItem('theme')||'dark';
   r.setAttribute('data-theme',t);
-  function upd(b){b.textContent=t==='dark'?'☀ Светлая':'☾ Тёмная';}
+  function upd(b){b.innerHTML=t==='dark'?'<span class="theme-icon">☀</span><span class="theme-label">Светлая</span>':'<span class="theme-icon">☾</span><span class="theme-label">Тёмная</span>';}
   document.addEventListener('DOMContentLoaded',function(){
     var b=document.querySelector('.theme-btn');
     if(!b)return; upd(b);
