@@ -63,7 +63,7 @@
 <body>
 <header>
   <div class="logo">Karaoke</div>
-  <p class="subtitle">219 songs</p>
+  <p class="subtitle">224 songs</p>
   <button class="theme-btn" style="margin-top:16px" aria-label="Переключить тему">☀ Светлая</button>
   <div class="search-wrap">
     <span class="search-icon">♪</span>
@@ -300,10 +300,20 @@
     <li data-q="киркоров я за тебя умру"><a href="songs/kirkorov-ya-za-tebya-umru.html"><span class="song-artist">Киркоров</span><span class="song-title">Я за тебя умру</span><span class="song-arrow">→</span></a></li>
   
     <li data-q="киркоров я поднимаю свой бокал"><a href="songs/kirkorov-ya-podnimayu-svoy-bokal.html"><span class="song-artist">Киркоров</span><span class="song-title">Я поднимаю свой бокал</span><span class="song-arrow">→</span></a></li>
+  
+    <li data-q="киркоров единственная"><a href="songs/kirkorov-edinstvennaya.html"><span class="song-artist">Киркоров</span><span class="song-title">Единственная</span><span class="song-arrow">→</span></a></li>
+  
+    <li data-q="киркоров роза чайная"><a href="songs/kirkorov-roza-chaynaya.html"><span class="song-artist">Киркоров</span><span class="song-title">Роза чайная</span><span class="song-arrow">→</span></a></li>
+  
+    <li data-q="киркоров мне мама тихо говорила"><a href="songs/kirkorov-mne-mama-tikho-govorila.html"><span class="song-artist">Киркоров</span><span class="song-title">Мне мама тихо говорила</span><span class="song-arrow">→</span></a></li>
+  
+    <li data-q="киркоров дива"><a href="songs/kirkorov-diva.html"><span class="song-artist">Киркоров</span><span class="song-title">Дива</span><span class="song-arrow">→</span></a></li>
+  
+    <li data-q="киркоров струны"><a href="songs/kirkorov-struny.html"><span class="song-artist">Киркоров</span><span class="song-title">Струны</span><span class="song-arrow">→</span></a></li>
   </ul>
   <p id="empty">Nothing found</p>
 </main>
-<footer>219 songs · GitHub Pages</footer>
+<footer>224 songs · GitHub Pages</footer>
 <script>
 const search=document.getElementById('search');
 const items=document.querySelectorAll('#song-list li');
@@ -314,7 +324,7 @@ search.addEventListener('input',()=>{
   let v=0;
   items.forEach(li=>{const m=!q||li.dataset.q.includes(q);li.classList.toggle('hidden',!m);if(m)v++;});
   empty.style.display=(!q||v>0)?'none':'block';
-  count.textContent=q?v+'/219':'';
+  count.textContent=q?v+'/224':'';
 });
 if(window.innerWidth>600)search.focus();
 </script>
