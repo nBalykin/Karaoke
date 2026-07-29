@@ -91,8 +91,6 @@
   nav a.back-link { display: flex; align-items: center; gap: 8px; opacity: 1; }
   .back-arrow { font-size: 1.35em; font-weight: 700; line-height: 1; flex-shrink: 0; }
   .back-text { text-align: right; line-height: 1.3; }
-  nav > span { color: var(--border); font-size: 0.9rem; }
-
   main {
     position: relative; z-index: 1;
     max-width: 680px;
@@ -164,14 +162,18 @@
     border-top: 1px solid var(--border);
   }
   footer a { color: var(--gold); text-decoration: none; }
+  :root{--scale:1}
+  main{font-size:calc(1em * var(--scale,1))}
+  .scale-controls{display:inline-flex;align-items:center;gap:2px;margin-left:8px}
+  .scale-btn{background:none;border:1px solid var(--border);color:var(--muted);width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:.7rem;line-height:1;display:inline-flex;align-items:center;justify-content:center;transition:color .2s,border-color .2s;font-family:inherit}
+  .scale-btn:hover{color:var(--gold);border-color:var(--gold)}
 </style>
 </head>
 <body>
 <nav>
-  <a href="../index.html" class="back-link"><span class="back-arrow">←</span><span class="back-text">К списку песен</span></a>
-  <span>/</span>
-  <span style="color:var(--muted); font-size:0.85rem; line-height:1.3">Градский<br>Рыба пила</span>
+  <a href="../index.html" class="back-link"><span class="back-arrow">←</span><span class="back-text">Список песен</span></a>
   <button class="theme-btn" aria-label="Переключить тему">☀ Светлая</button>
+  <div class="scale-controls"><button class="scale-btn" onclick="changeScale(-1)" aria-label="Уменьшить текст">A−</button><button class="scale-btn" onclick="changeScale(1)" aria-label="Увеличить текст">A+</button></div>
 </nav>
 <main>
   <header>
@@ -203,6 +205,20 @@
       update(btn);
     });
   });
+})();
+</script>
+<script>
+(function(){
+  var MIN=0.7,MAX=1.8,STEP=0.1;
+  var scale=1;
+  try{var s=parseFloat(localStorage.getItem('textScale'));if(!isNaN(s))scale=s;}catch(e){}
+  function apply(){document.documentElement.style.setProperty('--scale',scale.toFixed(2));}
+  apply();
+  window.changeScale=function(dir){
+    scale=Math.min(MAX,Math.max(MIN,Math.round((scale+dir*STEP)*100)/100));
+    apply();
+    try{localStorage.setItem('textScale',scale);}catch(e){}
+  };
 })();
 </script>
 </body>

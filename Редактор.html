@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Karaoke Editor</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #0f0e0c;
+  --surface:  #1a1814;
+  --surface2: #221f1a;
+  --border:   #2e2b26;
+  --gold:     #c9a84c;
+  --gold2:    #e8c96b;
+  --text:     #e8e0d0;
+  --muted:    #8a8070;
+  --lyric:    #f0e8d8;
+  --green:    #4caf7d;
+  --red:      #e05c5c;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 14px;
+  min-height: 100vh;
+}
+
+/* ── TOP BAR ── */
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 52px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.logo {
+  font-family: Georgia, serif;
+  font-size: 1.1rem;
+  color: var(--gold);
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+.tabs {
+  display: flex;
+  gap: 2px;
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 3px;
+}
+.tab {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 13px;
+  padding: 5px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.tab.active {
+  background: var(--surface2);
+  color: var(--text);
+}
+.tab:hover:not(.active) { color: var(--text); }
+
+.topbar-actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+
+/* ── BUTTONS ── */
+.btn {
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 7px 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: opacity 0.15s, transform 0.1s;
+  white-space: nowrap;
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: var(--gold); color: #1a1410; }
+.btn-primary:hover { opacity: 0.88; }
+.btn-sec { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+.btn-sec:hover { border-color: var(--gold); color: var(--gold); }
+.btn-ghost { background: none; color: var(--muted); border: 1px solid var(--border); }
+.btn-ghost:hover { color: var(--text); border-color: var(--border); }
+.btn-green { background: var(--green); color: #0f1a14; }
+.btn-green:hover { opacity: 0.88; }
+.btn-sm { padding: 5px 10px; font-size: 12px; }
+
+/* ── PANELS ── */
+.page { display: none; padding: 20px; max-width: 1200px; margin: 0 auto; }
+.page.active { display: block; }
+
+/* ── EDITOR ── */
+.editor-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+@media (max-width: 760px) { .editor-grid { grid-template-columns: 1fr; } }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.card-head {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.card-body { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+
+label { font-size: 12px; color: var(--muted); display: block; margin-bottom: 4px; }
+input[type=text], textarea {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 14px;
+  padding: 8px 10px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s;
+}
+input[type=text]:focus, textarea:focus { border-color: var(--gold); }
+textarea { resize: vertical; min-height: 280px; line-height: 1.65; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.field { display: flex; flex-direction: column; }
+
+/* Preview */
+.preview-chrome {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.preview-urlbar {
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.dot-r { background: #ff5f56; }
+.dot-y { background: #ffbd2e; }
+.dot-g { background: #27c93f; }
+.preview-url-text { font-size: 11px; color: var(--muted); margin-left: 4px; }
+.preview-body {
+  background: #0f0e0c;
+  padding: 20px;
+  min-height: 340px;
+  max-height: 560px;
+  overflow-y: auto;
+}
+.prev-nav { font-size: 11px; color: #c9a84c; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px; opacity: 0.7; }
+.prev-artist { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: #c9a84c; margin-bottom: 5px; display: block; }
+.prev-title { font-family: Georgia, serif; font-size: 1.6rem; color: #f0e8d8; font-weight: 700; line-height: 1.15; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid #2e2b26; }
+.prev-lyrics { color: #f0e8d8; font-family: Georgia, serif; font-size: 15px; line-height: 1.75; }
+.prev-lyrics p { margin: 0; }
+.prev-lyrics .gap { height: 1.2em; }
+.prev-lyrics h3 { color: #c9a84c; font-size: 13px; margin: 1.2em 0 0.3em; }
+.prev-placeholder { color: #8a8070; font-style: italic; font-size: 13px; }
+
+.hint { font-size: 12px; color: var(--muted); line-height: 1.6; }
+.hint code { background: var(--bg); padding: 1px 5px; border-radius: 3px; font-size: 11px; color: var(--gold); }
+
+/* ── INDEX UPDATER ── */
+.index-section { max-width: 680px; display: flex; flex-direction: column; gap: 16px; }
+.drop-zone {
+  border: 2px dashed var(--border);
+  border-radius: 10px;
+  padding: 36px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  background: var(--surface);
+}
+.drop-zone:hover, .drop-zone.over {
+  border-color: var(--gold);
+  background: var(--surface2);
+}
+.drop-zone-icon { font-size: 2rem; margin-bottom: 8px; }
+.drop-zone p { color: var(--muted); font-size: 13px; margin-top: 4px; }
+.drop-zone strong { color: var(--text); }
+input[type=file] { display: none; }
+
+.status-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 13px;
+  display: none;
+}
+.status-box.show { display: block; }
+.status-ok { color: var(--green); }
+.status-err { color: var(--red); }
+.status-info { color: var(--muted); }
+
+/* ── SONG LIST ── */
+.song-table {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.song-table-head {
+  display: grid;
+  grid-template-columns: 180px 1fr 120px 80px;
+  padding: 8px 16px;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.song-row {
+  display: grid;
+  grid-template-columns: 180px 1fr 120px 80px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+  font-size: 13px;
+  transition: background 0.1s;
+}
+.song-row:last-child { border-bottom: none; }
+.song-row:hover { background: var(--surface2); }
+.song-table-head > div, .song-row > div { min-width: 0; }
+.song-artist { color: var(--gold); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; white-space: normal; overflow-wrap: break-word; word-break: break-word; }
+.song-fname { font-size: 11px; color: var(--muted); font-family: monospace; overflow-wrap: break-word; word-break: break-word; }
+.song-actions { display: flex; gap: 6px; justify-content: flex-end; align-self: start; }
+
+.search-bar {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 14px;
+  padding: 8px 12px;
+  width: 100%;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.15s;
+}
+.search-bar:focus { border-color: var(--gold); }
+.search-bar::placeholder { color: var(--muted); }
+
+.empty-state { text-align: center; padding: 40px; color: var(--muted); font-style: italic; font-size: 13px; }
+
+/* toast */
+.toast {
+  position: fixed;
+  bottom: 24px; right: 24px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 13px;
+  color: var(--text);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.2s, transform 0.2s;
+  pointer-events: none;
+  z-index: 999;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="logo">♪ Karaoke Editor</span>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('editor')">Новая песня</button>
+    <button class="tab" onclick="switchTab('index')">Обновить index.html</button>
+    <button class="tab" onclick="switchTab('list')">Все песни</button>
+  </div>
+  <div class="topbar-actions">
+    <span id="globalStatus" style="font-size:12px;color:var(--muted)"></span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- TAB 1: EDITOR -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page active" id="page-editor">
+  <div class="editor-grid">
+
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div class="card">
+        <div class="card-head">Данные песни</div>
+        <div class="card-body">
+          <div class="row2">
+            <div class="field">
+              <label>Исполнитель</label>
+              <input type="text" id="artist" placeholder="Кино" oninput="updatePreview()">
+            </div>
+            <div class="field">
+              <label>Название</label>
+              <input type="text" id="title" placeholder="Группа крови" oninput="updatePreview()">
+            </div>
+          </div>
+          <div class="field">
+            <label>Текст песни</label>
+            <textarea id="lyrics" placeholder="Строка песни&#10;Ещё строка&#10;&#10;(Пустая строка = разрыв между куплетами)&#10;&#10;Припев:&#10;Строка припева" oninput="updatePreview()"></textarea>
+          </div>
+          <p class="hint">
+            Пустая строка → разрыв между куплетами<br>
+            Строка заканчивается на <code>:</code> → заголовок секции (Припев:, Куплет:)
+          </p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">Действия</div>
+        <div class="card-body">
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="btn btn-primary" onclick="downloadSong()">⬇ Скачать HTML файл</button>
+            <button class="btn btn-sec" onclick="copyFilename()">📋 Скопировать имя файла</button>
+            <button class="btn btn-ghost" onclick="clearEditor()">✕ Очистить</button>
+          </div>
+          <p class="hint" id="filenameHint" style="color:var(--gold);font-family:monospace;font-size:12px"></p>
+          <p class="hint">
+            После скачивания — положи файл в <code>karaoke-site/songs/</code>,<br>
+            затем перейди на вкладку <strong>Обновить index.html</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="preview-chrome">
+      <div class="preview-urlbar">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <span class="preview-url-text" id="prevUrl">songs/__.html</span>
+      </div>
+      <div class="preview-body">
+        <div class="prev-nav">← Karaoke</div>
+        <div id="prevArtist" class="prev-artist" style="display:none"></div>
+        <div id="prevTitle" class="prev-title prev-placeholder">Начни вводить...</div>
+        <div class="prev-lyrics" id="prevLyrics"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- TAB 2: INDEX UPDATER -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page" id="page-index">
+  <div class="index-section">
+    <div>
+      <h2 style="font-size:1rem;margin-bottom:6px">Обновить index.html</h2>
+      <p class="hint">Создай несколько песен на вкладке «Новая песня» — каждая скачанная песня попадает в очередь ниже. Когда очередь готова, загрузи <code>index.html</code> один раз — все песни из очереди добавятся сразу, список отсортируется по алфавиту (сначала по исполнителю, затем по названию).</p>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <span>Очередь на добавление</span>
+        <button class="btn btn-ghost btn-sm" id="clearQueueBtn" style="display:none" onclick="clearQueue()">✕ Очистить</button>
+      </div>
+      <div class="card-body">
+        <div id="queueList" style="font-size:13px;color:var(--muted);display:flex;flex-direction:column;">
+          Пока не создано ни одной песни в этой сессии.
+        </div>
+      </div>
+    </div>
+
+    <div class="drop-zone" id="dropZone" onclick="document.getElementById('indexFile').click()">
+      <div class="drop-zone-icon">📄</div>
+      <strong>Перетащи сюда index.html</strong>
+      <p>или кликни, чтобы выбрать файл</p>
+    </div>
+    <input type="file" id="indexFile" accept=".html" onchange="handleIndexFile(this.files[0])">
+
+    <div class="status-box" id="indexStatus"></div>
+
+    <div id="indexActions" style="display:none;gap:8px;flex-wrap:wrap;" class="flex">
+      <button class="btn btn-green" onclick="downloadUpdatedIndex()">⬇ Скачать обновлённый index.html</button>
+    </div>
+
+    <div class="card">
+      <div class="card-head">Инструкция</div>
+      <div class="card-body">
+        <ol style="padding-left:1.2em;font-size:13px;color:var(--muted);line-height:2;">
+          <li>На вкладке <strong>Новая песня</strong> — заполни и скачай столько песен, сколько нужно. Каждая попадёт в очередь</li>
+          <li>Положи все скачанные файлы в <code>karaoke-site/songs/</code></li>
+          <li>Перетащи <code>karaoke-site/index.html</code> сюда — все песни из очереди добавятся разом и список пересортируется по алфавиту</li>
+          <li>Скачай обновлённый <code>index.html</code> и замени им старый</li>
+          <li><code>git add . → git commit → git push</code></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- TAB 3: SONG LIST -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page" id="page-list">
+  <div style="display:flex;flex-direction:column;gap:12px;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <input class="search-bar" id="listSearch" placeholder="Поиск по исполнителю или названию..." oninput="renderList()" style="max-width:400px">
+      <span id="listCount" style="font-size:12px;color:var(--muted)"></span>
+      <div style="margin-left:auto;display:flex;gap:8px;">
+        <button class="btn btn-sec btn-sm" onclick="document.getElementById('indexLoad').click()">📂 Загрузить index.html</button>
+      </div>
+      <input type="file" id="indexLoad" accept=".html" style="display:none" onchange="loadIndexForList(this.files[0])">
+    </div>
+
+    <div class="song-table" id="songTable">
+      <div class="empty-state">
+        Загрузи <strong>index.html</strong> чтобы увидеть список песен
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── STATE ──────────────────────────────────────────────────────────
+let lastSong = null;       // { artist, title, filename, html } — последняя скачанная (для превью-подсказок)
+let songQueue = [];        // [{ artist, title, filename, html }] — очередь на пакетное добавление в index.html
+let indexHTML = null;      // raw index.html content
+let songsList = [];        // parsed from index.html
+
+// ── TABS ───────────────────────────────────────────────────────────
+function switchTab(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ── SLUGIFY ────────────────────────────────────────────────────────
+const TRANSLIT = {
+  'а':'a','б':'b','в':'v','г':'g','д':'d','е':'e','ё':'yo','ж':'zh','з':'z',
+  'и':'i','й':'y','к':'k','л':'l','м':'m','н':'n','о':'o','п':'p','р':'r',
+  'с':'s','т':'t','у':'u','ф':'f','х':'kh','ц':'ts','ч':'ch','ш':'sh',
+  'щ':'sch','ъ':'','ы':'y','ь':'','э':'e','ю':'yu','я':'ya'
+};
+function slugify(t) {
+  let s = t.toLowerCase().split('').map(c => TRANSLIT[c] ?? c).join('');
+  return s.replace(/[^\w\s-]/g,'').replace(/[\s_]+/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'') || 'song';
+}
+
+// ── LYRICS → HTML ──────────────────────────────────────────────────
+function esc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function lyricsToHtml(text) {
+  return text.split('\n').map(line => {
+    const t = line.trimEnd();
+    if (!t) return '<div class="gap"></div>';
+    const bracket = t.match(/^\s*\[\s*(.+?)\s*\]\s*$/);
+    if (bracket) return `<h3>${esc(bracket[1])}</h3>`;
+    if (t.endsWith(':')) return `<h3>${esc(t)}</h3>`;
+    return `<p>${esc(t)}</p>`;
+  }).join('');
+}
+
+// ── PREVIEW ────────────────────────────────────────────────────────
+function getSlug() {
+  const a = document.getElementById('artist').value.trim();
+  const t = document.getElementById('title').value.trim();
+  return slugify((a ? a + '-' : '') + (t || 'song'));
+}
+
+function updatePreview() {
+  const artist = document.getElementById('artist').value.trim();
+  const title  = document.getElementById('title').value.trim();
+  const lyrics = document.getElementById('lyrics').value;
+  const slug   = getSlug();
+
+  document.getElementById('prevUrl').textContent = 'songs/' + slug + '.html';
+  document.getElementById('filenameHint').textContent = slug ? '→ ' + slug + '.html' : '';
+
+  const pa = document.getElementById('prevArtist');
+  const pt = document.getElementById('prevTitle');
+
+  if (artist) { pa.textContent = artist; pa.style.display = 'block'; }
+  else { pa.style.display = 'none'; }
+
+  if (title) {
+    pt.textContent = title;
+    pt.className = 'prev-title';
+  } else {
+    pt.textContent = 'Начни вводить...';
+    pt.className = 'prev-title prev-placeholder';
+  }
+
+  document.getElementById('prevLyrics').innerHTML = lyricsToHtml(lyrics);
+}
+
+// ── BUILD SONG HTML ─────────────────────────────────────────────────
+function buildSongHTML(artist, title, lyricsText) {
+  const artistTitle = artist ? artist + ' — ' + title : title;
+  const artistTag   = artist ? `<span class="artist">${esc(artist)}</span>` : '';
+  const content     = lyricsToHtml(lyricsText);
+
+  return `<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${esc(artistTitle)} — Karaoke</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300&display=swap');
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--bg:#0f0e0c;--surface:#1a1814;--border:#2e2b26;--gold:#c9a84c;--gold2:#e8c96b;--text:#e8e0d0;--muted:#8a8070;--lyric:#f0e8d8;--nav-bg:rgba(15,14,12,0.92)}
+  :root[data-theme=light]{--bg:#faf8f4;--surface:#f0ece4;--border:#d8d0c0;--gold:#9a6e20;--gold2:#b8862a;--text:#2a2318;--muted:#7a6e5e;--lyric:#1a1410;--nav-bg:rgba(250,248,244,0.92)}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:'Source Serif 4',Georgia,serif;font-size:clamp(17px,2.5vw,21px);line-height:1.75;min-height:100vh}
+  body::before{content:'';position:fixed;inset:0;z-index:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none}
+  nav{position:sticky;top:0;z-index:10;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;gap:12px}
+  nav a{color:var(--gold);text-decoration:none;font-family:'Playfair Display',serif;font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;opacity:.8;transition:opacity .2s}
+  nav a:hover{opacity:1}
+  nav a.back-link{display:flex;align-items:center;gap:8px;opacity:1}
+  .back-arrow{font-size:1.35em;font-weight:700;line-height:1;flex-shrink:0}
+  .back-text{text-align:right;line-height:1.3}
+  .theme-btn{margin-left:auto;background:none;border:1px solid var(--border);border-radius:20px;color:var(--muted);font-size:.75rem;letter-spacing:.08em;padding:4px 12px;cursor:pointer;transition:color .2s,border-color .2s;display:inline-flex;align-items:center;justify-content:center;line-height:1}
+  .theme-btn:hover{color:var(--gold);border-color:var(--gold)}
+  main{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:clamp(32px,6vw,80px) clamp(20px,5vw,40px)}
+  header{margin-bottom:48px;padding-bottom:32px;border-bottom:1px solid var(--border)}
+  .artist{display:inline-block;font-family:'Playfair Display',serif;font-size:.8rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+  h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,6vw,3.2rem);font-weight:700;line-height:1.15;color:var(--lyric)}
+  .lyrics{color:var(--lyric)}
+  .lyrics p{margin:0;padding:0;line-height:1.75}
+  .lyrics .gap{height:1.4em}
+  .lyrics h3{font-family:'Playfair Display',serif;color:var(--gold);margin:1.8em 0 .4em;font-size:1rem;letter-spacing:.05em}
+  .lyrics blockquote{border-left:2px solid var(--gold);padding-left:1.2em;color:var(--muted);margin:1.2em 0}
+  footer{position:relative;z-index:1;text-align:center;padding:32px 24px 48px;color:var(--muted);font-size:.8rem;letter-spacing:.08em;border-top:1px solid var(--border)}
+  footer a{color:var(--gold);text-decoration:none}
+  :root{--scale:1}
+  main{font-size:calc(1em * var(--scale,1))}
+  .scale-controls{display:inline-flex;align-items:center;gap:2px;margin-left:8px}
+  .scale-btn{background:none;border:1px solid var(--border);color:var(--muted);width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:.7rem;line-height:1;display:inline-flex;align-items:center;justify-content:center;transition:color .2s,border-color .2s;font-family:inherit}
+  .scale-btn:hover{color:var(--gold);border-color:var(--gold)}
+</style>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="back-link"><span class="back-arrow">←</span><span class="back-text">Список песен</span></a>
+  <button class="theme-btn" aria-label="Тема">☀ Светлая</button>
+  <div class="scale-controls"><button class="scale-btn" onclick="changeScale(-1)" aria-label="Уменьшить текст">A−</button><button class="scale-btn" onclick="changeScale(1)" aria-label="Увеличить текст">A+</button></div>
+</nav>
+<main>
+<header>${artistTag}<h1>${esc(title)}</h1></header>
+<div class="lyrics">${content}</div>
+</main>
+<footer><a href="../index.html">Караоке</a></footer>
+<script>
+(function(){
+  var r=document.documentElement,t=localStorage.getItem('theme')||'dark';
+  r.setAttribute('data-theme',t);
+  function upd(b){b.textContent=t==='dark'?'☀ Светлая':'☾ Тёмная';}
+  document.addEventListener('DOMContentLoaded',function(){
+    var b=document.querySelector('.theme-btn');
+    if(!b)return; upd(b);
+    b.addEventListener('click',function(){
+      t=t==='dark'?'light':'dark';
+      r.setAttribute('data-theme',t);
+      localStorage.setItem('theme',t);
+      upd(b);
+    });
+  });
+})();
+<\/script>
+<script>
+(function(){
+  var MIN=0.7,MAX=1.8,STEP=0.1;
+  var scale=1;
+  try{var s=parseFloat(localStorage.getItem('textScale'));if(!isNaN(s))scale=s;}catch(e){}
+  function apply(){document.documentElement.style.setProperty('--scale',scale.toFixed(2));}
+  apply();
+  window.changeScale=function(dir){
+    scale=Math.min(MAX,Math.max(MIN,Math.round((scale+dir*STEP)*100)/100));
+    apply();
+    try{localStorage.setItem('textScale',scale);}catch(e){}
+  };
+})();
+<\/script>
+</body>
+</html>`;
+}
+
+// ── DOWNLOAD SONG ──────────────────────────────────────────────────
+function downloadSong() {
+  const artist = document.getElementById('artist').value.trim();
+  const title  = document.getElementById('title').value.trim();
+  if (!title) { toast('Введи название песни', true); return; }
+  const lyrics   = document.getElementById('lyrics').value;
+  const filename = getSlug() + '.html';
+  const html     = buildSongHTML(artist, title, lyrics);
+
+  download(filename, html);
+
+  lastSong = { artist, title, filename, html };
+  addToQueue(lastSong);
+  toast('✓ Скачано: ' + filename);
+}
+
+function copyFilename() {
+  const fn = getSlug() + '.html';
+  navigator.clipboard.writeText(fn).then(() => toast('✓ Скопировано: ' + fn));
+}
+
+function clearEditor() {
+  document.getElementById('artist').value = '';
+  document.getElementById('title').value  = '';
+  document.getElementById('lyrics').value = '';
+  updatePreview();
+}
+
+// ── INDEX UPDATER ──────────────────────────────────────────────────
+
+// Добавляет/обновляет песню в очереди на добавление в index.html
+function addToQueue(song) {
+  const idx = songQueue.findIndex(s => s.filename === song.filename);
+  if (idx >= 0) songQueue[idx] = song; else songQueue.push(song);
+  renderQueue();
+}
+
+function removeFromQueue(i) {
+  songQueue.splice(i, 1);
+  renderQueue();
+}
+
+function clearQueue() {
+  songQueue = [];
+  renderQueue();
+  toast('Очередь очищена');
+}
+
+function renderQueue() {
+  const el  = document.getElementById('queueList');
+  const btn = document.getElementById('clearQueueBtn');
+  if (!songQueue.length) {
+    el.innerHTML = '<span style="color:var(--muted)">Пока не создано ни одной песни в этой сессии.</span>';
+    btn.style.display = 'none';
+    return;
+  }
+  btn.style.display = 'inline-flex';
+  el.innerHTML = songQueue.map((s, i) => {
+    const label = s.artist ? s.artist + ' — ' + s.title : s.title;
+    return `<div style="display:flex;align-items:center;gap:10px;padding:6px 0;${i > 0 ? 'border-top:1px solid var(--border);' : ''}">
+      <span style="color:var(--gold);flex:1;font-size:13px">${esc(label)}</span>
+      <span style="color:var(--muted);font-family:monospace;font-size:11px">${esc(s.filename)}</span>
+      <button class="btn btn-ghost btn-sm" onclick="removeFromQueue(${i})" title="Убрать из очереди">✕</button>
+    </div>`;
+  }).join('');
+}
+
+// Drag and drop
+const dz = document.getElementById('dropZone');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('over'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('over'));
+dz.addEventListener('drop', e => {
+  e.preventDefault(); dz.classList.remove('over');
+  const f = e.dataTransfer.files[0];
+  if (f) handleIndexFile(f);
+});
+
+function handleIndexFile(file) {
+  if (!file || !file.name.endsWith('.html')) {
+    showIndexStatus('Нужен HTML файл', 'err'); return;
+  }
+  const reader = new FileReader();
+  reader.onload = e => {
+    indexHTML = e.target.result;
+    if (!songQueue.length) {
+      showIndexStatus('Файл загружен, но очередь пуста. Сначала создай одну или несколько песен на вкладке «Новая песня».', 'info');
+      return;
+    }
+    injectSongsIntoIndex();
+  };
+  reader.readAsText(file, 'utf-8');
+}
+
+// Достаёт из index.html текущий список песен {artist, title, href}
+function parseSongsFromIndex(html) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  const songs = [];
+  doc.querySelectorAll('#song-list li').forEach(li => {
+    const a      = li.querySelector('a');
+    const href   = a ? a.getAttribute('href') : '';
+    const artist = li.querySelector('.song-artist')?.textContent.trim() || '';
+    const title  = li.querySelector('.song-title')?.textContent.trim() || '';
+    songs.push({ artist, title, href });
+  });
+  return songs;
+}
+
+// Сортировка: сначала по исполнителю (группировка), затем по названию — регистронезависимо, с учётом ru-локали
+function sortSongs(songs) {
+  return songs.slice().sort((a, b) => {
+    const byArtist = a.artist.localeCompare(b.artist, 'ru', { sensitivity: 'base' });
+    if (byArtist !== 0) return byArtist;
+    return a.title.localeCompare(b.title, 'ru', { sensitivity: 'base' });
+  });
+}
+
+function buildSongLi(song) {
+  const q = (song.artist + ' ' + song.title).toLowerCase();
+  const artistSpan = song.artist
+    ? `<span class="song-artist">${esc(song.artist)}</span>`
+    : `<span class="song-artist" style="opacity:0">—</span>`;
+  return `<li data-q="${esc(q)}"><a href="${song.href}">${artistSpan}<span class="song-title">${esc(song.title)}</span><span class="song-arrow">→</span></a></li>`;
+}
+
+// Пакетно добавляет ВСЕ песни из очереди в index.html и пересортировывает весь список по алфавиту
+function injectSongsIntoIndex() {
+  if (!indexHTML || !songQueue.length) return;
+
+  if (!indexHTML.includes('<ul id="song-list">') || !indexHTML.includes('</ul>')) {
+    showIndexStatus('Не удалось найти список в index.html — файл повреждён?', 'err'); return;
+  }
+
+  const existing = parseSongsFromIndex(indexHTML);
+  const existingHrefs = new Set(existing.map(s => s.href));
+
+  const added = [], skipped = [];
+  songQueue.forEach(s => {
+    const href = 'songs/' + s.filename;
+    if (existingHrefs.has(href)) { skipped.push(s); return; }
+    existing.push({ artist: s.artist, title: s.title, href });
+    existingHrefs.add(href);
+    added.push(s);
+  });
+
+  if (!added.length) {
+    showIndexStatus('⚠ Все песни из очереди уже есть в index.html', 'err');
+    return;
+  }
+
+  const sorted = sortSongs(existing);
+  const ulInner = '\n    ' + sorted.map(buildSongLi).join('\n    ') + '\n  ';
+  indexHTML = indexHTML.replace(/(<ul id="song-list">)[\s\S]*?(<\/ul>)/, `$1${ulInner}$2`);
+
+  // Update total count
+  const total = sorted.length;
+  indexHTML = indexHTML.replace(/<p class="subtitle">\d+ songs<\/p>/, `<p class="subtitle">${total} songs</p>`);
+  indexHTML = indexHTML.replace(/count\.textContent\s*=\s*q\?v\+'\/\d+'/, `count.textContent=q?v+'/${total}'`);
+  indexHTML = indexHTML.replace(/<footer>\d+ songs/, `<footer>${total} songs`);
+
+  // Убираем добавленные песни из очереди (оставляем те, что были пропущены как дубликаты)
+  songQueue = songQueue.filter(s => !added.includes(s));
+  renderQueue();
+
+  let msg = `✓ Добавлено песен: ${added.length}. Список отсортирован по алфавиту (исполнитель → название). Теперь скачай обновлённый index.html.`;
+  if (skipped.length) msg += ` Пропущено как дубликаты: ${skipped.length}.`;
+  showIndexStatus(msg, 'ok');
+  document.getElementById('indexActions').style.display = 'flex';
+}
+
+function showIndexStatus(msg, type) {
+  const el = document.getElementById('indexStatus');
+  el.textContent = msg;
+  el.className = `status-box show status-${type}`;
+}
+
+function downloadUpdatedIndex() {
+  if (!indexHTML) return;
+  download('index.html', indexHTML);
+  toast('✓ index.html скачан');
+}
+
+// ── SONG LIST ──────────────────────────────────────────────────────
+function loadIndexForList(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const html = e.target.result;
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    songsList = [];
+    doc.querySelectorAll('#song-list li').forEach(li => {
+      const a      = li.querySelector('a');
+      const href   = a ? a.getAttribute('href') : '';
+      const artist = li.querySelector('.song-artist')?.textContent.trim() || '';
+      const title  = li.querySelector('.song-title')?.textContent.trim() || '';
+      const q      = li.dataset.q || '';
+      songsList.push({ artist, title, href, q });
+    });
+    renderList();
+    toast('✓ Загружено: ' + songsList.length + ' песен');
+  };
+  reader.readAsText(file, 'utf-8');
+}
+
+function renderList() {
+  const q     = (document.getElementById('listSearch')?.value || '').toLowerCase().trim();
+  const table = document.getElementById('songTable');
+  const count = document.getElementById('listCount');
+
+  if (!songsList.length) {
+    table.innerHTML = '<div class="empty-state">Загрузи <strong>index.html</strong>, чтобы увидеть список песен</div>';
+    count.textContent = '';
+    return;
+  }
+
+  const filtered = q ? songsList.filter(s => s.q.includes(q)) : songsList;
+  count.textContent = q ? `${filtered.length} из ${songsList.length}` : `${songsList.length} песен`;
+
+  if (!filtered.length) {
+    table.innerHTML = '<div class="empty-state">Ничего не найдено</div>';
+    return;
+  }
+
+  table.innerHTML = `
+    <div class="song-table-head">
+      <div>Исполнитель</div><div>Название</div><div>Файл</div><div></div>
+    </div>
+    ${filtered.map(s => `
+    <div class="song-row">
+      <div class="song-artist">${esc(s.artist)}</div>
+      <div>${esc(s.title)}</div>
+      <div class="song-fname">${esc(s.href.replace('songs/',''))}</div>
+      <div class="song-actions">
+        <button class="btn btn-ghost btn-sm" onclick="editSong(${JSON.stringify(esc(s.artist))},${JSON.stringify(esc(s.title))})">✏ Изменить</button>
+      </div>
+    </div>`).join('')}`;
+}
+
+function editSong(artist, title) {
+  document.getElementById('artist').value = artist;
+  document.getElementById('title').value  = title;
+  document.getElementById('lyrics').value = '';
+  updatePreview();
+  switchTabByName('editor');
+  toast('Заполни текст и скачай новый файл (заменит старый)');
+}
+
+function switchTabByName(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.querySelectorAll('.tab')[name === 'editor' ? 0 : name === 'index' ? 1 : 2].classList.add('active');
+}
+
+// ── UTILS ──────────────────────────────────────────────────────────
+function download(filename, text) {
+  const blob = new Blob([text], { type: 'text/html;charset=utf-8' });
+  const a    = document.createElement('a');
+  a.href     = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+let toastTimer;
+function toast(msg, isErr) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.borderColor = isErr ? 'var(--red)' : 'var(--border)';
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>
