@@ -60,7 +60,7 @@
 <body>
 <header>
   <div class="logo">Karaoke</div>
-  <p class="subtitle">235 songs</p>
+  <p class="subtitle">242 songs</p>
   <button class="theme-btn" style="margin-top:16px" aria-label="Переключить тему">☀ Светлая</button>
   <div class="search-wrap">
     <span class="search-icon">♪</span>
@@ -304,11 +304,18 @@
     <li data-q="sting shape of my heart"><a href="songs/sting-shape-of-my-heart.html"><span class="song-artist">Sting</span><span class="song-title">Shape of My Heart</span><span class="song-arrow">→</span></a></li>
     <li data-q="the beatles yesterday"><a href="songs/the-beatles-yesterday.html"><span class="song-artist">The Beatles</span><span class="song-title">Yesterday</span><span class="song-arrow">→</span></a></li>
     <li data-q="the hatters я делаю шаг"><a href="songs/the-hatters-ya-delayu-shag.html"><span class="song-artist">The Hatters</span><span class="song-title">Я делаю шаг</span><span class="song-arrow">→</span></a></li>
+    <li data-q="uma2rman звезды"><a href="songs/uma2rman-zvezdy.html"><span class="song-artist">Uma2rman</span><span class="song-title">Звезды</span><span class="song-arrow">→</span></a></li>
+    <li data-q="uma2rman кажется"><a href="songs/uma2rman-kazhetsya.html"><span class="song-artist">Uma2rman</span><span class="song-title">Кажется</span><span class="song-arrow">→</span></a></li>
+    <li data-q="uma2rman не стой, танцуй"><a href="songs/uma2rman-ne-stoy-tantsuy.html"><span class="song-artist">Uma2rman</span><span class="song-title">Не стой, танцуй</span><span class="song-arrow">→</span></a></li>
+    <li data-q="uma2rman папины дочки"><a href="songs/uma2rman-papiny-dochki.html"><span class="song-artist">Uma2rman</span><span class="song-title">Папины дочки</span><span class="song-arrow">→</span></a></li>
+    <li data-q="uma2rman прасковья"><a href="songs/uma2rman-praskovya.html"><span class="song-artist">Uma2rman</span><span class="song-title">Прасковья</span><span class="song-arrow">→</span></a></li>
+    <li data-q="uma2rman проститься"><a href="songs/uma2rman-prostitsya.html"><span class="song-artist">Uma2rman</span><span class="song-title">Проститься</span><span class="song-arrow">→</span></a></li>
+    <li data-q="uma2rman ты далеко"><a href="songs/uma2rman-ty-daleko.html"><span class="song-artist">Uma2rman</span><span class="song-title">Ты далеко</span><span class="song-arrow">→</span></a></li>
     <li data-q="uma2rman ума турман"><a href="songs/uma2rman-uma-turman.html"><span class="song-artist">Uma2rman</span><span class="song-title">Ума Турман</span><span class="song-arrow">→</span></a></li>
   </ul>
   <p id="empty">Nothing found</p>
 </main>
-<footer>235 songs · GitHub Pages</footer>
+<footer>242 songs · GitHub Pages</footer>
 <script>
 const search=document.getElementById('search');
 const items=document.querySelectorAll('#song-list li');
@@ -319,7 +326,7 @@ search.addEventListener('input',()=>{
   let v=0;
   items.forEach(li=>{const m=!q||li.dataset.q.includes(q);li.classList.toggle('hidden',!m);if(m)v++;});
   empty.style.display=(!q||v>0)?'none':'block';
-  count.textContent=q?v+'/235':'';
+  count.textContent=q?v+'/242':'';
 });
 if(window.innerWidth>600)search.focus();
 </script>
