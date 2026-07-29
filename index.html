@@ -226,6 +226,7 @@
     <li data-q="меладзе вера"><a href="songs/meladze-vera.html"><span class="song-artist">Меладзе</span><span class="song-title">Вера</span><span class="song-arrow">→</span></a></li>
     <li data-q="меладзе красиво"><a href="songs/meladze-krasivo.html"><span class="song-artist">Меладзе</span><span class="song-title">Красиво</span><span class="song-arrow">→</span></a></li>
     <li data-q="меладзе небеса"><a href="songs/meladze-nebesa.html"><span class="song-artist">Меладзе</span><span class="song-title">Небеса</span><span class="song-arrow">→</span></a></li>
+    <li data-q="меладзе салют, вера"><a href="songs/meladze-salyut-vera.html"><span class="song-artist">Меладзе</span><span class="song-title">Салют, Вера</span><span class="song-arrow">→</span></a></li>
     <li data-q="меладзе самба белого мотылька"><a href="songs/meladze-samba-belogo-motylka.html"><span class="song-artist">Меладзе</span><span class="song-title">Самба белого мотылька</span><span class="song-arrow">→</span></a></li>
     <li data-q="мираж музыка нас связала"><a href="songs/mirazh-muzyka-nas-svyazala.html"><span class="song-artist">Мираж</span><span class="song-title">Музыка нас связала</span><span class="song-arrow">→</span></a></li>
     <li data-q="народная ой, то не вечер"><a href="songs/narodnaya-oy-to-ne-vecher.html"><span class="song-artist">Народная</span><span class="song-title">Ой, то не вечер</span><span class="song-arrow">→</span></a></li>
@@ -315,7 +316,7 @@ search.addEventListener('input',()=>{
   let v=0;
   items.forEach(li=>{const m=!q||li.dataset.q.includes(q);li.classList.toggle('hidden',!m);if(m)v++;});
   empty.style.display=(!q||v>0)?'none':'block';
-  count.textContent=q?v+'/242':'';
+  count.textContent=q?v+'/243':'';
 });
 if(window.innerWidth>600)search.focus();
 </script>
