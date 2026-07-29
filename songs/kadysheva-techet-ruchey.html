@@ -134,7 +134,6 @@
 
   .lyrics h3, .lyrics h4 {
     font-family: 'Playfair Display', serif;
-    font-style: italic;
     color: var(--gold);
     margin: 1.8em 0 0.4em;
     font-size: 1rem;
@@ -165,6 +164,7 @@
   <a href="../index.html">← Karaoke</a>
   <span>/</span>
   <span style="color:var(--muted); font-size:0.85rem">Кадышева — Течет ручей</span>
+  <button class="theme-btn" aria-label="Переключить тему">☀ Светлая</button>
 </nav>
 <main>
   <header>
@@ -172,7 +172,7 @@
     <h1>Течет ручей</h1>
   </header>
   <div class="lyrics">
-    <p>Вот и прошли года, но мы не старые</p><p>Недолюбившие, сидим усталые</p><p>Весна счастливая, а сколько красок в ней</p><p>Под старой ивою течёт-течёт ручей</p><div class="gap"></div><p><strong>[Припев]</strong></p><p>Течёт ручей, бежит ручей</p><p>И я ничья, и ты ничей</p><p>Течёт ручей, бежит ручей</p><p>И я ничья, и ты ничей</p><div class="gap"></div><p>И что-то помнится, как мы лопатили</p><p>Не стали всё-таки людьми богатыми</p><p>Рядились простенько, гуляли всей гурьбой</p><p>Теперь я с проседью, а ты как лунь седой</p><div class="gap"></div><p><strong>[Припев]</strong></p><p>Течёт ручей, бежит ручей</p><p>И я ничья, и ты ничей</p><p>Течёт ручей, бежит ручей</p><p>И я ничья, и ты ничей</p><div class="gap"></div><p>Судьбе, наверное, так было надобно</p><p>Сердца открытые, как перед ладаном</p><p>Недолюбившие, поведать есть о чём</p><p>Любовь остывшая сожгла седым огнём</p><div class="gap"></div><p><strong>[Припев]</strong></p><p>Течёт ручей, бежит ручей</p><p>И я ничья, и ты ничей</p><p>Течёт ручей, бежит ручей</p><p>И я ничья, и ты ничей</p><p>Течёт ручей, бежит ручей</p><p>И я ничья, и ты ничей</p><div class="gap"></div>
+    <p>Вот и прошли года, но мы не старые</p><p>Недолюбившие, сидим усталые</p><p>Весна счастливая, а сколько красок в ней</p><p>Под старой ивою течёт-течёт ручей</p><div class="gap"></div><h3>Припев</h3><p>Течёт ручей, бежит ручей</p><p>И я ничья, и ты ничей</p><p>Течёт ручей, бежит ручей</p><p>И я ничья, и ты ничей</p><div class="gap"></div><p>И что-то помнится, как мы лопатили</p><p>Не стали всё-таки людьми богатыми</p><p>Рядились простенько, гуляли всей гурьбой</p><p>Теперь я с проседью, а ты как лунь седой</p><div class="gap"></div><h3>Припев</h3><p>Течёт ручей, бежит ручей</p><p>И я ничья, и ты ничей</p><p>Течёт ручей, бежит ручей</p><p>И я ничья, и ты ничей</p><div class="gap"></div><p>Судьбе, наверное, так было надобно</p><p>Сердца открытые, как перед ладаном</p><p>Недолюбившие, поведать есть о чём</p><p>Любовь остывшая сожгла седым огнём</p><div class="gap"></div><h3>Припев</h3><p>Течёт ручей, бежит ручей</p><p>И я ничья, и ты ничей</p><p>Течёт ручей, бежит ручей</p><p>И я ничья, и ты ничей</p><p>Течёт ручей, бежит ручей</p><p>И я ничья, и ты ничей</p><div class="gap"></div>
   </div>
 </main>
 <footer>
@@ -181,7 +181,8 @@
 <script>
 (function(){
   var r=document.documentElement;
-  var t=localStorage.getItem('theme')||'dark';
+  var t='dark';
+  try { t=localStorage.getItem('theme')||'dark'; } catch(e) {}
   r.setAttribute('data-theme',t);
   function update(btn){btn.textContent=t==='dark'?'☀ Светлая':'☾ Тёмная';}
   document.addEventListener('DOMContentLoaded',function(){
@@ -191,7 +192,7 @@
     btn.addEventListener('click',function(){
       t=t==='dark'?'light':'dark';
       r.setAttribute('data-theme',t);
-      localStorage.setItem('theme',t);
+      try { localStorage.setItem('theme',t); } catch(e) {}
       update(btn);
     });
   });

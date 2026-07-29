@@ -134,7 +134,6 @@
 
   .lyrics h3, .lyrics h4 {
     font-family: 'Playfair Display', serif;
-    font-style: italic;
     color: var(--gold);
     margin: 1.8em 0 0.4em;
     font-size: 1rem;
@@ -165,6 +164,7 @@
   <a href="../index.html">← Karaoke</a>
   <span>/</span>
   <span style="color:var(--muted); font-size:0.85rem">Бременские — Ничего на свете лучше нету</span>
+  <button class="theme-btn" aria-label="Переключить тему">☀ Светлая</button>
 </nav>
 <main>
   <header>
@@ -172,7 +172,7 @@
     <h1>Ничего на свете лучше нету</h1>
   </header>
   <div class="lyrics">
-    <p><strong>[Куплет 1]</strong></p><p>Ничего на свете лучше нету</p><p>Чем бродить друзьям по белу свету</p><p>Тем, кто дружен, не страшны тревоги</p><p>Нам любые дороги дороги</p><p>Нам любые дороги дороги</p><div class="gap"></div><p><strong>[Куплет 2]</strong></p><p>Мы своё призванье не забудем —</p><p>Смех и радость мы приносим людям</p><p>Нам дворцов заманчивые своды</p><p>Не заменят никогда свободы</p><p>Не заменят никогда свободы</p><div class="gap"></div><p><strong>[Куплет 3]</strong></p><p>Наш ковёр — цветочная поляна</p><p>Наши стены — сосны-великаны</p><p>Наша крыша — небо голубое</p><p>Наше счастье — жить такой судьбою</p><p>Наше счастье — жить такой судьбою</p>
+    <h3>Куплет 1</h3><p>Ничего на свете лучше нету</p><p>Чем бродить друзьям по белу свету</p><p>Тем, кто дружен, не страшны тревоги</p><p>Нам любые дороги дороги</p><p>Нам любые дороги дороги</p><div class="gap"></div><h3>Куплет 2</h3><p>Мы своё призванье не забудем —</p><p>Смех и радость мы приносим людям</p><p>Нам дворцов заманчивые своды</p><p>Не заменят никогда свободы</p><p>Не заменят никогда свободы</p><div class="gap"></div><h3>Куплет 3</h3><p>Наш ковёр — цветочная поляна</p><p>Наши стены — сосны-великаны</p><p>Наша крыша — небо голубое</p><p>Наше счастье — жить такой судьбою</p><p>Наше счастье — жить такой судьбою</p>
   </div>
 </main>
 <footer>
@@ -181,7 +181,8 @@
 <script>
 (function(){
   var r=document.documentElement;
-  var t=localStorage.getItem('theme')||'dark';
+  var t='dark';
+  try { t=localStorage.getItem('theme')||'dark'; } catch(e) {}
   r.setAttribute('data-theme',t);
   function update(btn){btn.textContent=t==='dark'?'☀ Светлая':'☾ Тёмная';}
   document.addEventListener('DOMContentLoaded',function(){
@@ -191,7 +192,7 @@
     btn.addEventListener('click',function(){
       t=t==='dark'?'light':'dark';
       r.setAttribute('data-theme',t);
-      localStorage.setItem('theme',t);
+      try { localStorage.setItem('theme',t); } catch(e) {}
       update(btn);
     });
   });

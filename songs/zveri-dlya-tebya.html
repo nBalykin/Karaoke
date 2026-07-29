@@ -79,17 +79,20 @@
 <footer><a href="../index.html">Karaoke</a></footer>
 <script>
 (function(){
-  var r=document.documentElement,t=localStorage.getItem('theme')||'dark';
+  var r=document.documentElement;
+  var t='dark';
+  try { t=localStorage.getItem('theme')||'dark'; } catch(e) {}
   r.setAttribute('data-theme',t);
-  function upd(b){b.textContent=t==='dark'?'☀ Светлая':'☾ Тёмная';}
+  function update(btn){btn.textContent=t==='dark'?'☀ Светлая':'☾ Тёмная';}
   document.addEventListener('DOMContentLoaded',function(){
-    var b=document.querySelector('.theme-btn');
-    if(!b)return; upd(b);
-    b.addEventListener('click',function(){
+    var btn=document.querySelector('.theme-btn');
+    if(!btn)return;
+    update(btn);
+    btn.addEventListener('click',function(){
       t=t==='dark'?'light':'dark';
       r.setAttribute('data-theme',t);
-      localStorage.setItem('theme',t);
-      upd(b);
+      try { localStorage.setItem('theme',t); } catch(e) {}
+      update(btn);
     });
   });
 })();

@@ -134,7 +134,6 @@
 
   .lyrics h3, .lyrics h4 {
     font-family: 'Playfair Display', serif;
-    font-style: italic;
     color: var(--gold);
     margin: 1.8em 0 0.4em;
     font-size: 1rem;
@@ -165,6 +164,7 @@
   <a href="../index.html">← Karaoke</a>
   <span>/</span>
   <span style="color:var(--muted); font-size:0.85rem">Меладзе — Самба белого мотылька</span>
+  <button class="theme-btn" aria-label="Переключить тему">☀ Светлая</button>
 </nav>
 <main>
   <header>
@@ -181,7 +181,8 @@
 <script>
 (function(){
   var r=document.documentElement;
-  var t=localStorage.getItem('theme')||'dark';
+  var t='dark';
+  try { t=localStorage.getItem('theme')||'dark'; } catch(e) {}
   r.setAttribute('data-theme',t);
   function update(btn){btn.textContent=t==='dark'?'☀ Светлая':'☾ Тёмная';}
   document.addEventListener('DOMContentLoaded',function(){
@@ -191,7 +192,7 @@
     btn.addEventListener('click',function(){
       t=t==='dark'?'light':'dark';
       r.setAttribute('data-theme',t);
-      localStorage.setItem('theme',t);
+      try { localStorage.setItem('theme',t); } catch(e) {}
       update(btn);
     });
   });

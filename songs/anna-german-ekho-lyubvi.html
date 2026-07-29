@@ -134,7 +134,6 @@
 
   .lyrics h3, .lyrics h4 {
     font-family: 'Playfair Display', serif;
-    font-style: italic;
     color: var(--gold);
     margin: 1.8em 0 0.4em;
     font-size: 1rem;
@@ -165,6 +164,7 @@
   <a href="../index.html">← Karaoke</a>
   <span>/</span>
   <span style="color:var(--muted); font-size:0.85rem">Анна Герман — Эхо Любви</span>
+  <button class="theme-btn" aria-label="Переключить тему">☀ Светлая</button>
 </nav>
 <main>
   <header>
@@ -172,7 +172,7 @@
     <h1>Эхо Любви</h1>
   </header>
   <div class="lyrics">
-    <p><strong>[Куплет 1]</strong></p><p>Покроется небо пылинками звёзд</p><p>И выгнутся ветви упруго</p><p>Тебя я услышу за тысячу вёрст</p><p>Мы эхо, мы эхо</p><p>Мы долгое эхо друг друга</p><p>Мы эхо, мы эхо</p><p>Мы долгое эхо друг друга</p><div class="gap"></div><p><strong>[Куплет 2]</strong></p><p>И мне до тебя, где бы я ни была</p><p>Дотронуться сердцем нетрудно</p><p>Опять нас любовь за собой позвала</p><p>Мы нежность, мы нежность</p><p>Мы вечная нежность друг друга</p><p>Мы нежность, мы нежность</p><p>Мы вечная нежность друг друга</p><div class="gap"></div><p><strong>[Куплет 3]</strong></p><p>И даже в краю наползающей тьмы</p><p>За гранью смертельного круга</p><p>Я знаю, с тобой не расстанемся мы</p><p>Мы память, мы память</p><p>Мы звёздная память друг друга</p><p>Мы память, мы память</p><p>Мы звёздная память друг друга</p>
+    <h3>Куплет 1</h3><p>Покроется небо пылинками звёзд</p><p>И выгнутся ветви упруго</p><p>Тебя я услышу за тысячу вёрст</p><p>Мы эхо, мы эхо</p><p>Мы долгое эхо друг друга</p><p>Мы эхо, мы эхо</p><p>Мы долгое эхо друг друга</p><div class="gap"></div><h3>Куплет 2</h3><p>И мне до тебя, где бы я ни была</p><p>Дотронуться сердцем нетрудно</p><p>Опять нас любовь за собой позвала</p><p>Мы нежность, мы нежность</p><p>Мы вечная нежность друг друга</p><p>Мы нежность, мы нежность</p><p>Мы вечная нежность друг друга</p><div class="gap"></div><h3>Куплет 3</h3><p>И даже в краю наползающей тьмы</p><p>За гранью смертельного круга</p><p>Я знаю, с тобой не расстанемся мы</p><p>Мы память, мы память</p><p>Мы звёздная память друг друга</p><p>Мы память, мы память</p><p>Мы звёздная память друг друга</p>
   </div>
 </main>
 <footer>
@@ -181,7 +181,8 @@
 <script>
 (function(){
   var r=document.documentElement;
-  var t=localStorage.getItem('theme')||'dark';
+  var t='dark';
+  try { t=localStorage.getItem('theme')||'dark'; } catch(e) {}
   r.setAttribute('data-theme',t);
   function update(btn){btn.textContent=t==='dark'?'☀ Светлая':'☾ Тёмная';}
   document.addEventListener('DOMContentLoaded',function(){
@@ -191,7 +192,7 @@
     btn.addEventListener('click',function(){
       t=t==='dark'?'light':'dark';
       r.setAttribute('data-theme',t);
-      localStorage.setItem('theme',t);
+      try { localStorage.setItem('theme',t); } catch(e) {}
       update(btn);
     });
   });

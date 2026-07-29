@@ -134,7 +134,6 @@
 
   .lyrics h3, .lyrics h4 {
     font-family: 'Playfair Display', serif;
-    font-style: italic;
     color: var(--gold);
     margin: 1.8em 0 0.4em;
     font-size: 1rem;
@@ -165,6 +164,7 @@
   <a href="../index.html">← Karaoke</a>
   <span>/</span>
   <span style="color:var(--muted); font-size:0.85rem">Агутин — Граница</span>
+  <button class="theme-btn" aria-label="Переключить тему">☀ Светлая</button>
 </nav>
 <main>
   <header>
@@ -172,9 +172,9 @@
     <h1>Граница</h1>
   </header>
   <div class="lyrics">
-    <p>Забрали куда-то</p><p>Прямо из военкомата</p><p>Увезли вдали</p><p>Автомат в руки дали</p><div class="gap"></div><p>Ты прости, мама</p><p>Что я был такой упрямый</p><p>Но я служить должен</p><p>Также, как все</p><div class="gap"></div><p><strong>[Припев]</strong></p><p>Паровоз умчится</p><p>Прямо на границу</p><p>Так что аты-баты</p><p>Мы теперь солдаты</p><div class="gap"></div><p>Родные не знали</p><p>Что парня в армию забрали</p><p>Но я в письме первом</p><p>Напишу все непременно</p><div class="gap"></div><p>Ты прости, мама</p><p>Что я был такой упрямый</p><p>Но я служить должен</p><p>Также, как все
+    <p>Забрали куда-то</p><p>Прямо из военкомата</p><p>Увезли вдали</p><p>Автомат в руки дали</p><div class="gap"></div><p>Ты прости, мама</p><p>Что я был такой упрямый</p><p>Но я служить должен</p><p>Также, как все</p><div class="gap"></div><h3>Припев</h3><p>Паровоз умчится</p><p>Прямо на границу</p><p>Так что аты-баты</p><p>Мы теперь солдаты</p><div class="gap"></div><p>Родные не знали</p><p>Что парня в армию забрали</p><p>Но я в письме первом</p><p>Напишу все непременно</p><div class="gap"></div><p>Ты прости, мама</p><p>Что я был такой упрямый</p><p>Но я служить должен</p><p>Также, как все
 
-</p><p><strong>[Припев]</strong></p><p>Паровоз умчится</p><p>Прямо на границу</p><p>Так что аты-баты</p><p>Мы теперь солдаты</p><div class="gap"></div><p>Вот когда мамка</p><p>Опять вернусь я на гражданку</p><p>Ты поймешь сына</p><p>Настоящего мужчину</p><div class="gap"></div><p>Ты поверь мама</p><p>Я не зря такой упрямый</p><p>Ведь я служить должен</p><p>Также как все</p><div class="gap"></div><p><strong>[Припев]</strong></p><p>Паровоз умчится</p><p>Прямо на границу</p><p>Так что аты-баты</p><p>Мы теперь солдаты</p><div class="gap"></div>
+</p><h3>Припев</h3><p>Паровоз умчится</p><p>Прямо на границу</p><p>Так что аты-баты</p><p>Мы теперь солдаты</p><div class="gap"></div><p>Вот когда мамка</p><p>Опять вернусь я на гражданку</p><p>Ты поймешь сына</p><p>Настоящего мужчину</p><div class="gap"></div><p>Ты поверь мама</p><p>Я не зря такой упрямый</p><p>Ведь я служить должен</p><p>Также как все</p><div class="gap"></div><h3>Припев</h3><p>Паровоз умчится</p><p>Прямо на границу</p><p>Так что аты-баты</p><p>Мы теперь солдаты</p><div class="gap"></div>
   </div>
 </main>
 <footer>
@@ -183,7 +183,8 @@
 <script>
 (function(){
   var r=document.documentElement;
-  var t=localStorage.getItem('theme')||'dark';
+  var t='dark';
+  try { t=localStorage.getItem('theme')||'dark'; } catch(e) {}
   r.setAttribute('data-theme',t);
   function update(btn){btn.textContent=t==='dark'?'☀ Светлая':'☾ Тёмная';}
   document.addEventListener('DOMContentLoaded',function(){
@@ -193,7 +194,7 @@
     btn.addEventListener('click',function(){
       t=t==='dark'?'light':'dark';
       r.setAttribute('data-theme',t);
-      localStorage.setItem('theme',t);
+      try { localStorage.setItem('theme',t); } catch(e) {}
       update(btn);
     });
   });

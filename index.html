@@ -64,6 +64,7 @@
 <header>
   <div class="logo">Karaoke</div>
   <p class="subtitle">213 songs</p>
+  <button class="theme-btn" style="margin-top:16px" aria-label="Переключить тему">☀ Светлая</button>
   <div class="search-wrap">
     <span class="search-icon">♪</span>
     <input id="search" type="search" placeholder="Artist or song title..." autocomplete="off" autocorrect="off" spellcheck="false">
@@ -309,7 +310,8 @@ if(window.innerWidth>600)search.focus();
 <script>
 (function(){
   var r=document.documentElement;
-  var t=localStorage.getItem('theme')||'dark';
+  var t='dark';
+  try { t=localStorage.getItem('theme')||'dark'; } catch(e) {}
   r.setAttribute('data-theme',t);
   function update(btn){btn.textContent=t==='dark'?'☀ Светлая':'☾ Тёмная';}
   document.addEventListener('DOMContentLoaded',function(){
@@ -319,7 +321,7 @@ if(window.innerWidth>600)search.focus();
     btn.addEventListener('click',function(){
       t=t==='dark'?'light':'dark';
       r.setAttribute('data-theme',t);
-      localStorage.setItem('theme',t);
+      try { localStorage.setItem('theme',t); } catch(e) {}
       update(btn);
     });
   });
