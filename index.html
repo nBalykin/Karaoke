@@ -22,15 +22,27 @@
   #search::placeholder{color:var(--muted)}
   .search-icon{position:absolute;left:36px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;font-size:1rem}
   #count{position:absolute;right:36px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.78rem;letter-spacing:.05em}
-  main{position:relative;z-index:1;max-width:780px;margin:0 auto;padding:0 20px 80px}
-  #song-list{list-style:none}
-  #song-list li{border-bottom:1px solid var(--border);transition:background .15s}
+  .tabs{position:relative;z-index:1;display:flex;gap:8px;justify-content:center;margin-top:20px}
+  .tab-btn{background:none;border:1px solid var(--border);border-radius:20px;color:var(--muted);font-family:'Source Serif 4',serif;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;padding:6px 16px;cursor:pointer;transition:color .2s,border-color .2s,background-color .2s}
+  .tab-btn:hover{color:var(--gold);border-color:var(--gold)}
+  .tab-btn.active{color:var(--bg);background:var(--gold);border-color:var(--gold)}
+  main{position:relative;z-index:1;max-width:780px;margin:0 auto;padding:0 20px}
+  .back-btn{display:none;background:none;border:none;color:var(--muted);font-family:'Source Serif 4',serif;font-size:.85rem;padding:16px 8px;cursor:pointer;transition:color .2s}
+  .back-btn:hover{color:var(--gold)}
+  .back-btn.visible{display:block}
+  #song-list,#artist-list{list-style:none}
+  #song-list li,#artist-list li{border-bottom:1px solid var(--border);transition:background .15s}
+  #song-list li:last-child,#artist-list li:last-child{border-bottom:none}
   #song-list a{display:grid;grid-template-columns:170px 1fr auto;column-gap:12px;align-items:center;padding:16px 8px;text-decoration:none;color:var(--text);transition:color .15s,padding-left .2s}
   #song-list a:hover{color:var(--gold2);padding-left:14px}
-  .song-artist{font-size:.88rem;line-height:1.1;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);white-space:normal;overflow-wrap:normal;word-break:keep-all;min-width:0}
+  #artist-list a{display:grid;grid-template-columns:1fr auto auto;column-gap:12px;align-items:center;padding:16px 8px;text-decoration:none;color:var(--text);transition:color .15s,padding-left .2s}
+  #artist-list a:hover{color:var(--gold2);padding-left:14px}
+  .artist-name{font-size:1rem;line-height:1.1;color:var(--gold);overflow-wrap:normal;word-break:keep-all}
+  .artist-count{color:var(--muted);font-size:.78rem;letter-spacing:.05em}
+  .song-artist{font-size:1rem;line-height:1.1;color:var(--gold);white-space:normal;overflow-wrap:normal;word-break:keep-all;min-width:0}
   .song-title{font-size:1rem;line-height:1.1;font-family:'Source Serif 4',serif;min-width:0}
   .song-arrow{color:var(--border);font-size:.8rem;transition:color .15s,transform .2s}
-  #song-list a:hover .song-arrow{color:var(--gold);transform:translateX(4px)}
+  #song-list a:hover .song-arrow,#artist-list a:hover .song-arrow{color:var(--gold);transform:translateX(4px)}
   .hidden{display:none!important}
   #empty{text-align:center;color:var(--muted);padding:64px 0;font-style:italic;display:none}
   footer{position:relative;z-index:1;text-align:center;padding:24px;color:var(--muted);font-size:.75rem;letter-spacing:.1em;border-top:1px solid var(--border)}
@@ -42,15 +54,23 @@
       padding: 9px 8px;
       min-height: 53px;
     }
-    .song-artist { font-size: .78rem; }
+    #artist-list a {
+      column-gap: 8px;
+      padding: 9px 8px;
+      min-height: 53px;
+    }
   }
 </style>
 </head>
 <body>
 <header>
   <div class="logo">Караоке</div>
-  <p class="subtitle">242 песни</p>
+  <p class="subtitle">243 песни</p>
   <button class="theme-btn" style="margin-top:16px" aria-label="Переключить тему">☀ Светлая</button>
+  <div class="tabs" role="tablist">
+    <button id="tab-all" class="tab-btn active" type="button" role="tab" aria-selected="true">Все песни</button>
+    <button id="tab-artists" class="tab-btn" type="button" role="tab" aria-selected="false">Исполнители</button>
+  </div>
   <div class="search-wrap">
     <span class="search-icon">♪</span>
     <input id="search" type="search" placeholder="Название или автор, группа" autocomplete="off" autocorrect="off" spellcheck="false">
@@ -58,6 +78,8 @@
   </div>
 </header>
 <main>
+  <button id="back-btn" class="back-btn" type="button">← Ко всем исполнителям</button>
+  <ul id="artist-list" class="hidden"></ul>
   <ul id="song-list">
     <li data-q="агутин л. аэропорты"><a href="songs/agutin-aeroporty.html"><span class="song-artist"><b>Агутин Л.</b></span><span class="song-title">Аэропорты</span><span class="song-arrow">→</span></a></li>
     <li data-q="агутин л. граница"><a href="songs/agutin-granitsa.html"><span class="song-artist"><b>Агутин Л.</b></span><span class="song-title">Граница</span><span class="song-arrow">→</span></a></li>
@@ -103,9 +125,9 @@
     <li data-q="виа верасы малиновка"><a href="songs/via-verasy-malinovka.html"><span class="song-artist"><b>ВИА Верасы</b></span><span class="song-title">Малиновка</span><span class="song-arrow">→</span></a></li>
     <li data-q="виа веселые ребята люди встречаются"><a href="songs/via-veselye-rebyata-lyudi-vstrechayutsya.html"><span class="song-artist"><b>ВИА Веселые ребята</b></span><span class="song-title">Люди встречаются</span><span class="song-arrow">→</span></a></li>
     <li data-q="виа веселые ребята розовые розы"><a href="songs/via-veselye-rebyata-rozovye-rozy.html"><span class="song-artist"><b>ВИА Веселые ребята</b></span><span class="song-title">Розовые розы</span><span class="song-arrow">→</span></a></li>
-    <li data-q="виа пламя на дальней станции сойду"><a href="songs/via-plamya-na-dalney-stantsii-soydu.html"><span class="song-artist"><b>ВИА Пламя</b></span><span class="song-title">На дальней станции сойду</span><span class="song-arrow">→</span></a></li>
+    <li data-q="виа пламя (шаинский) на дальней станции сойду" data-composer="шаинский в."><a href="songs/via-plamya-shainskiy-na-dalney-stantsii-soydu.html"><span class="song-artist"><b>ВИА Пламя</b></span><span class="song-title">На дальней станции сойду</span><span class="song-arrow">→</span></a></li>
     <li data-q="виа пламя снег кружится"><a href="songs/via-plamya-sneg-kruzhitsya.html"><span class="song-artist"><b>ВИА Пламя</b></span><span class="song-title">Снег кружится</span><span class="song-arrow">→</span></a></li>
-    <li data-q="виа пламя (шаинский) идёт солдат по городу"><a href="songs/via-plamya-shainskiy-idyot-soldat-po-gorodu.html"><span class="song-artist"><b>ВИА Пламя (Шаинский)</b></span><span class="song-title">Идёт солдат по городу</span><span class="song-arrow">→</span></a></li>
+    <li data-q="виа пламя (шаинский) идёт солдат по городу" data-composer="шаинский в."><a href="songs/via-plamya-shainskiy-idyot-soldat-po-gorodu.html"><span class="song-artist"><b>ВИА Пламя</b></span><span class="song-title">Идёт солдат по городу</span><span class="song-arrow">→</span></a></li>
     <li data-q="город 312 213 дорог"><a href="songs/gorod-312-213-dorog.html"><span class="song-artist"><b>Город 312</b></span><span class="song-title">213 дорог</span><span class="song-arrow">→</span></a></li>
     <li data-q="город 312 вне зоны доступа"><a href="songs/gorod-312-vne-zony-dostupa.html"><span class="song-artist"><b>Город 312</b></span><span class="song-title">Вне зоны доступа</span><span class="song-arrow">→</span></a></li>
     <li data-q="город 312 девочка которая хотела счастья"><a href="songs/gorod-312-devochka-kotoraya-khotela-schastya.html"><span class="song-artist"><b>Город 312</b></span><span class="song-title">Девочка которая хотела счастья</span><span class="song-arrow">→</span></a></li>
@@ -151,14 +173,14 @@
     <li data-q="кино кукушка"><a href="songs/kino-kukushka.html"><span class="song-artist"><b>Кино</b></span><span class="song-title">Кукушка</span><span class="song-arrow">→</span></a></li>
     <li data-q="кино пачка сигарет"><a href="songs/kino-pachka-sigaret.html"><span class="song-artist"><b>Кино</b></span><span class="song-title">Пачка сигарет</span><span class="song-arrow">→</span></a></li>
     <li data-q="кинопесни александра"><a href="songs/kinopesni-aleksandra.html"><span class="song-artist"><b>Кинопесни</b></span><span class="song-title">Александра</span><span class="song-arrow">→</span></a></li>
-    <li data-q="кинопесни есть только миг"><a href="songs/kinopesni-est-tolko-mig.html"><span class="song-artist"><b>Кинопесни</b></span><span class="song-title">Есть только миг</span><span class="song-arrow">→</span></a></li>
-    <li data-q="кинопесни звенит январская вьюга"><a href="songs/kinopesni-zvenit-yanvarskaya-vyuga.html"><span class="song-artist"><b>Кинопесни</b></span><span class="song-title">Звенит январская вьюга</span><span class="song-arrow">→</span></a></li>
-    <li data-q="кинопесни кабы не было зимы"><a href="songs/kinopesni-kaby-ne-bylo-zimy.html"><span class="song-artist"><b>Кинопесни</b></span><span class="song-title">Кабы не было зимы</span><span class="song-arrow">→</span></a></li>
-    <li data-q="кинопесни песенка о медведях (где-то на белом свете)"><a href="songs/kinopesni-pesenka-o-medvedyakh-gde-to-na-belom-svete.html"><span class="song-artist"><b>Кинопесни</b></span><span class="song-title">Песенка о медведях (где-то на белом свете)</span><span class="song-arrow">→</span></a></li>
-    <li data-q="кинопесни песенка про зайцев"><a href="songs/kinopesni-pesenka-pro-zaytsev.html"><span class="song-artist"><b>Кинопесни</b></span><span class="song-title">Песенка про зайцев</span><span class="song-arrow">→</span></a></li>
+    <li data-q="кинопесни (зацепин) есть только миг" data-composer="зацепин а."><a href="songs/kinopesni-zatsepin-est-tolko-mig.html"><span class="song-artist"><b>Кинопесни</b></span><span class="song-title">Есть только миг</span><span class="song-arrow">→</span></a></li>
+    <li data-q="кинопесни (зацепин) звенит январская вьюга" data-composer="зацепин а."><a href="songs/kinopesni-zatsepin-zvenit-yanvarskaya-vyuga.html"><span class="song-artist"><b>Кинопесни</b></span><span class="song-title">Звенит январская вьюга</span><span class="song-arrow">→</span></a></li>
+    <li data-q="кинопесни (крылатов) кабы не было зимы" data-composer="крылатов е."><a href="songs/kinopesni-krylatov-kaby-ne-bylo-zimy.html"><span class="song-artist"><b>Кинопесни</b></span><span class="song-title">Кабы не было зимы</span><span class="song-arrow">→</span></a></li>
+    <li data-q="кинопесни (зацепин) песенка о медведях (где-то на белом свете)" data-composer="зацепин а."><a href="songs/kinopesni-zatsepin-pesenka-o-medvedyakh-gde-to-na-belom-svete.html"><span class="song-artist"><b>Кинопесни</b></span><span class="song-title">Песенка о медведях (где-то на белом свете)</span><span class="song-arrow">→</span></a></li>
+    <li data-q="кинопесни (зацепин) песенка про зайцев" data-composer="зацепин а."><a href="songs/kinopesni-zatsepin-pesenka-pro-zaytsev.html"><span class="song-artist"><b>Кинопесни</b></span><span class="song-title">Песенка про зайцев</span><span class="song-arrow">→</span></a></li>
     <li data-q="кинопесни постой, паровоз"><a href="songs/kinopesni-postoy-parovoz.html"><span class="song-artist"><b>Кинопесни</b></span><span class="song-title">Постой, паровоз</span><span class="song-arrow">→</span></a></li>
-    <li data-q="кинопесни снежинка"><a href="songs/kinopesni-snezhinka.html"><span class="song-artist"><b>Кинопесни</b></span><span class="song-title">Снежинка</span><span class="song-arrow">→</span></a></li>
-    <li data-q="кинопесни три белых коня"><a href="songs/kinopesni-tri-belykh-konya.html"><span class="song-artist"><b>Кинопесни</b></span><span class="song-title">Три белых коня</span><span class="song-arrow">→</span></a></li>
+    <li data-q="кинопесни (крылатов) снежинка" data-composer="крылатов е."><a href="songs/kinopesni-krylatov-snezhinka.html"><span class="song-artist"><b>Кинопесни</b></span><span class="song-title">Снежинка</span><span class="song-arrow">→</span></a></li>
+    <li data-q="кинопесни (крылатов) три белых коня" data-composer="крылатов е."><a href="songs/kinopesni-krylatov-tri-belykh-konya.html"><span class="song-artist"><b>Кинопесни</b></span><span class="song-title">Три белых коня</span><span class="song-arrow">→</span></a></li>
     <li data-q="кинопесни ты мне веришь?"><a href="songs/kinopesni-ty-mne-verish.html"><span class="song-artist"><b>Кинопесни</b></span><span class="song-title">Ты мне веришь?</span><span class="song-arrow">→</span></a></li>
     <li data-q="кинопесни я иду шагаю по москве"><a href="songs/kinopesni-ya-idu-shagayu-po-moskve.html"><span class="song-artist"><b>Кинопесни</b></span><span class="song-title">Я иду шагаю по Москве</span><span class="song-arrow">→</span></a></li>
     <li data-q="кипелов в. я свободен"><a href="songs/kipelov-ya-svoboden.html"><span class="song-artist"><b>Кипелов В.</b></span><span class="song-title">Я свободен</span><span class="song-arrow">→</span></a></li>
@@ -236,14 +258,14 @@
     <li data-q="носков н. это здорово"><a href="songs/noskov-eto-zdorovo.html"><span class="song-artist"><b>Носков Н.</b></span><span class="song-title">Это здорово</span><span class="song-arrow">→</span></a></li>
     <li data-q="отпетые мошенники люби меня люби"><a href="songs/otpetye-moshenniki-lyubi-menya-lyubi.html"><span class="song-artist"><b>Отпетые мошенники</b></span><span class="song-title">Люби меня люби</span><span class="song-arrow">→</span></a></li>
     <li data-q="пахмутова а. до свиданья, москва"><a href="songs/pakhmutova-do-svidanya-moskva.html"><span class="song-artist"><b>Пахмутова А.</b></span><span class="song-title">До свиданья, Москва</span><span class="song-arrow">→</span></a></li>
-    <li data-q="песни военных лет вечер на рейде"><a href="songs/pesni-voennykh-let-vecher-na-reyde.html"><span class="song-artist"><b>Песни военных лет</b></span><span class="song-title">Вечер на рейде</span><span class="song-arrow">→</span></a></li>
+    <li data-q="песни военных лет (соловьев-седой) вечер на рейде" data-composer="соловьев-седой в."><a href="songs/pesni-voennykh-let-solovev-sedoy-vecher-na-reyde.html"><span class="song-artist"><b>Песни военных лет</b></span><span class="song-title">Вечер на рейде</span><span class="song-arrow">→</span></a></li>
     <li data-q="песни военных лет казаки (в берлине)"><a href="songs/pesni-voennykh-let-kazaki-v-berline.html"><span class="song-artist"><b>Песни военных лет</b></span><span class="song-title">Казаки (в Берлине)</span><span class="song-arrow">→</span></a></li>
     <li data-q="песни военных лет катюша"><a href="songs/pesni-voennykh-let-katyusha.html"><span class="song-artist"><b>Песни военных лет</b></span><span class="song-title">Катюша</span><span class="song-arrow">→</span></a></li>
     <li data-q="песни военных лет на поле танки грохотали"><a href="songs/pesni-voennykh-let-na-pole-tanki-grokhotali.html"><span class="song-artist"><b>Песни военных лет</b></span><span class="song-title">На поле танки грохотали</span><span class="song-arrow">→</span></a></li>
     <li data-q="песни военных лет синий платочек"><a href="songs/pesni-voennykh-let-siniy-platochek.html"><span class="song-artist"><b>Песни военных лет</b></span><span class="song-title">Синий платочек</span><span class="song-arrow">→</span></a></li>
-    <li data-q="песни военных лет случайный вальс"><a href="songs/pesni-voennykh-let-sluchaynyy-vals.html"><span class="song-artist"><b>Песни военных лет</b></span><span class="song-title">Случайный вальс</span><span class="song-arrow">→</span></a></li>
+    <li data-q="песни военных лет (фрадкин) случайный вальс" data-composer="фрадкин м."><a href="songs/pesni-voennykh-let-fradkin-sluchaynyy-vals.html"><span class="song-artist"><b>Песни военных лет</b></span><span class="song-title">Случайный вальс</span><span class="song-arrow">→</span></a></li>
     <li data-q="песни военных лет смуглянка"><a href="songs/pesni-voennykh-let-smuglyanka.html"><span class="song-artist"><b>Песни военных лет</b></span><span class="song-title">Смуглянка</span><span class="song-arrow">→</span></a></li>
-    <li data-q="песняры беловежская пуща"><a href="songs/pesnyary-belovezhskaya-puscha.html"><span class="song-artist"><b>Песняры</b></span><span class="song-title">Беловежская пуща</span><span class="song-arrow">→</span></a></li>
+    <li data-q="песняры (пахмутова) беловежская пуща" data-composer="пахмутова а."><a href="songs/pesnyary-pakhmutova-belovezhskaya-puscha.html"><span class="song-artist"><b>Песняры</b></span><span class="song-title">Беловежская пуща</span><span class="song-arrow">→</span></a></li>
     <li data-q="песняры вологда"><a href="songs/pesnyary-vologda.html"><span class="song-artist"><b>Песняры</b></span><span class="song-title">Вологда</span><span class="song-arrow">→</span></a></li>
     <li data-q="порнофильмы я так соскучился"><a href="songs/pornofilmy-ya-tak-soskuchilsya.html"><span class="song-artist"><b>Порнофильмы</b></span><span class="song-title">Я так соскучился</span><span class="song-arrow">→</span></a></li>
     <li data-q="пресняков в. зурбаган"><a href="songs/presnyakov-zurbagan.html"><span class="song-artist"><b>Пресняков В.</b></span><span class="song-title">Зурбаган</span><span class="song-arrow">→</span></a></li>
@@ -285,8 +307,8 @@
     <li data-q="шаинский в. пусть бегут неуклюже"><a href="songs/shainskiy-pust-begut-neuklyuzhe.html"><span class="song-artist"><b>Шаинский В.</b></span><span class="song-title">Пусть бегут неуклюже</span><span class="song-arrow">→</span></a></li>
     <li data-q="шуфутинский м. 3 сентября"><a href="songs/shufutinskiy-3-sentyabrya.html"><span class="song-artist"><b>Шуфутинский М.</b></span><span class="song-title">3 сентября</span><span class="song-arrow">→</span></a></li>
     <li data-q="юлиан русский вальс"><a href="songs/yulian-russkiy-vals.html"><span class="song-artist"><b>Юлиан</b></span><span class="song-title">Русский вальс</span><span class="song-arrow">→</span></a></li>
-    <li data-q="abba money"><a href="songs/abba-money.html"><span class="song-artist"><b>Abba</b></span><span class="song-title">Money</span><span class="song-arrow">→</span></a></li>
-    <li data-q="abba the winner takes it all"><a href="songs/abba-the-winner-takes-it-all.html"><span class="song-artist"><b>Abba</b></span><span class="song-title">The winner takes it all</span><span class="song-arrow">→</span></a></li>
+    <li data-q="abba money"><a href="songs/abba-money.html"><span class="song-artist"><b>ABBA</b></span><span class="song-title">Money</span><span class="song-arrow">→</span></a></li>
+    <li data-q="abba the winner takes it all"><a href="songs/abba-the-winner-takes-it-all.html"><span class="song-artist"><b>ABBA</b></span><span class="song-title">The winner takes it all</span><span class="song-arrow">→</span></a></li>
     <li data-q="bart howard fly me to the moon"><a href="songs/fly-me-to-the-moon.html"><span class="song-artist"><b>Bart Howard</b></span><span class="song-title">Fly me to the moon</span><span class="song-arrow">→</span></a></li>
     <li data-q="percy mayfield hit the road, jack"><a href="songs/hit-the-road-jack.html"><span class="song-artist"><b>Percy Mayfield</b></span><span class="song-title">Hit the road, Jack</span><span class="song-arrow">→</span></a></li>
     <li data-q="queen the show must go on"><a href="songs/queen-the-show-must-go-on.html"><span class="song-artist"><b>Queen</b></span><span class="song-title">The Show Must Go On</span><span class="song-arrow">→</span></a></li>
@@ -308,16 +330,116 @@
 <footer>GitHub Pages</footer>
 <script>
 const search=document.getElementById('search');
-const items=document.querySelectorAll('#song-list li');
+const items=Array.from(document.querySelectorAll('#song-list li'));
+const songList=document.getElementById('song-list');
+const artistListEl=document.getElementById('artist-list');
 const empty=document.getElementById('empty');
 const count=document.getElementById('count');
-search.addEventListener('input',()=>{
-  const q=search.value.toLowerCase().trim();
-  let v=0;
-  items.forEach(li=>{const m=!q||li.dataset.q.includes(q);li.classList.toggle('hidden',!m);if(m)v++;});
-  empty.style.display=(!q||v>0)?'none':'block';
-  count.textContent=q?v+'/243':'';
+const backBtn=document.getElementById('back-btn');
+const tabAll=document.getElementById('tab-all');
+const tabArtists=document.getElementById('tab-artists');
+const TOTAL_SONGS=items.length;
+
+items.forEach(li=>{
+  const name=li.querySelector('.song-artist').textContent.trim();
+  li.dataset.artist=name.toLowerCase();
 });
+
+// Каждая песня всегда попадает в свою основную категорию (группа/исполнитель).
+// Если у неё есть известный автор музыки (data-composer), она ДОПОЛНИТЕЛЬНО
+// засчитывается в категорию этого автора — без дробления основной категории.
+const artists=[];
+const artistIndex=new Map();
+items.forEach(li=>{
+  const key=li.dataset.artist;
+  if(!artistIndex.has(key)){
+    const name=li.querySelector('.song-artist').textContent.trim();
+    const entry={key,name,count:0};
+    artistIndex.set(key,entry);
+    artists.push(entry);
+  }
+  artistIndex.get(key).count++;
+});
+items.forEach(li=>{
+  const ckey=li.dataset.composer;
+  if(ckey&&artistIndex.has(ckey)){
+    artistIndex.get(ckey).count++;
+  }
+});
+
+artists.forEach(a=>{
+  const li=document.createElement('li');
+  li.dataset.q=a.name.toLowerCase();
+  const link=document.createElement('a');
+  link.href='#';
+  link.innerHTML='<span class="artist-name"><b>'+a.name+'</b></span><span class="artist-count">'+a.count+'</span><span class="song-arrow">→</span>';
+  link.addEventListener('click',(e)=>{
+    e.preventDefault();
+    activeArtist=a.key;
+    search.value='';
+    render();
+  });
+  li.appendChild(link);
+  artistListEl.appendChild(li);
+});
+const artistItems=Array.from(artistListEl.querySelectorAll('li'));
+
+let currentTab='all';
+let activeArtist=null;
+
+function setTab(tab){
+  currentTab=tab;
+  activeArtist=null;
+  search.value='';
+  tabAll.classList.toggle('active',tab==='all');
+  tabAll.setAttribute('aria-selected',tab==='all');
+  tabArtists.classList.toggle('active',tab==='artists');
+  tabArtists.setAttribute('aria-selected',tab==='artists');
+  render();
+}
+
+tabAll.addEventListener('click',()=>setTab('all'));
+tabArtists.addEventListener('click',()=>setTab('artists'));
+backBtn.addEventListener('click',()=>{
+  activeArtist=null;
+  search.value='';
+  render();
+});
+
+function render(){
+  const q=search.value.toLowerCase().trim();
+  const searching=!!q;
+  const showingSongs=searching||currentTab==='all'||(currentTab==='artists'&&activeArtist);
+  songList.classList.toggle('hidden',!showingSongs);
+  artistListEl.classList.toggle('hidden',showingSongs);
+  backBtn.classList.toggle('visible',currentTab==='artists'&&!!activeArtist);
+
+  let v=0,total=0;
+  if(showingSongs){
+    // Во время поиска всегда ищем по всем песням, даже если открыта
+    // вкладка «Исполнители» — категория/автор в этот момент не ограничивают выборку.
+    const restrict=!searching&&currentTab==='artists'&&activeArtist;
+    items.forEach(li=>{
+      const artistMatch=!restrict||li.dataset.artist===activeArtist||li.dataset.composer===activeArtist;
+      const m=artistMatch&&(!q||li.dataset.q.includes(q));
+      li.classList.toggle('hidden',!m);
+      if(m)v++;
+    });
+    total=restrict?(artistIndex.get(activeArtist)?artistIndex.get(activeArtist).count:0):TOTAL_SONGS;
+  } else {
+    artistItems.forEach(li=>{
+      const m=!q||li.dataset.q.includes(q);
+      li.classList.toggle('hidden',!m);
+      if(m)v++;
+    });
+    total=artists.length;
+  }
+  empty.style.display=(!q||v>0)?'none':'block';
+  count.textContent=q?v+'/'+total:'';
+}
+
+search.addEventListener('input',render);
+render();
 if(window.innerWidth>600)search.focus();
 </script>
 
